@@ -1,0 +1,33 @@
+{
+  "name": "pure-leaflet",
+  "version": "0.0.1",
+  "description": "Put a description here",
+  "main": "build/Map.js",
+  "peerDependencies": {
+    "react": "^16.8.2"
+  },
+  "dependencies": {
+    "react": "^16.8.2",
+    "webpack": "^4.29.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack --watch",
+    "build": "webpack"
+  },
+  "author": {
+    "name": "chris",
+    "email": "canderson0289@gmail.com"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.3.3",
+    "@babel/preset-env": "^7.3.1",
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.24.1",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.5.1",
+    "webpack-cli": "^3.2.3"
+  }
+}
