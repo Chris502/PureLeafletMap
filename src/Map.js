@@ -74,30 +74,18 @@ class Map extends React.Component {
       autoClose: true,
     });
     map.addControl(searchControl)
-    if (this.props.features && this.state.features === null) {
-
-      this.setState({features: this.props.features})
-      this.props.features.map(currentFeature => {
-        L.geoJSON(currentFeature).bindTooltip((layer) => {
-        const savedArea = addArea(currentFeature)
-        return `Area: ${ savedArea + 'mi'}<sup>2</sup>`;
-     }  
-    ).addTo(map)}
-    )
-    }
     map.on('geosearch/showlocation', (result) => {
       const features = this.state.features !== null ? cloneDeep(this.state.features) : []
       const marker = L.marker(result.target._lastCenter).bindTooltip(layer => {
         return result.location.label;
-     })
-     console.log(marker)
-     const key = uuid()
-     marker.options.key = key
-     marker.addTo(map)
-     const geoJson = marker.toGeoJSON()
-     geoJson.properties.key = key
-     features.push(geoJson)
-      this.setState({features})
+      })
+      const key = uuid()
+      marker.options.key = key
+      marker.addTo(map)
+      const geoJson = marker.toGeoJSON()
+      geoJson.properties.key = key
+      features.push(geoJson)
+      this.setState({ features })
       this.props.featureSaver(features)
     })
     const zoomToShapes = (stateFeatures) => {
@@ -114,12 +102,12 @@ class Map extends React.Component {
         stateName: 'add-markers',
         icon: 'fa-space-shuttle fa-lg',
         title: 'add random markers',
-        onClick:  (control) => {
+        onClick: (control) => {
           if (this.state.tileLayer === 'street') this.setState({
             tileLayer: 'sat'
           },
             () => tiles.setUrl('https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}'))
-            control.state('remove-markers');
+          control.state('remove-markers');
 
         },
 
@@ -179,43 +167,43 @@ class Map extends React.Component {
       this.props.featureSaver(this.state.features)
       layer.layer.bindTooltip((layer) => {
         return `Area: ${area + 'mi'}<sup>2</sup>`;
-     }
-    )
-    layer.layer.on('pm:edit', (e) => {
-      console.log('edit', e)
-      const editedArea = addArea(e.target.toGeoJSON())
-      const editedLayer = e.target.toGeoJSON();
-      e.target.on('pm:markerdragend', () => {map.eachLayer(layer => {
-        if (layer.options.key) {
-          const editedLayer = layer.toGeoJSON()
-          const key = uuid()
-          editedLayer.properties.key = key
-          const filterFeats = features.filter(current =>{ 
-            return current.properties.key !== layer.options.key})
-          filterFeats.push(editedLayer)
-          this.props.featureSaver(filterFeats)
-          this.setState({ features: filterFeats })
-        }
-      })})
+      }
+      )
+      layer.layer.on('pm:edit', (e) => {
+        const editedArea = addArea(e.target.toGeoJSON())
+        const editedLayer = e.target.toGeoJSON();
+        e.target.on('pm:markerdragend', () => {
+          map.eachLayer(layer => {
+            if (layer.options.key) {
+              const editedLayer = layer.toGeoJSON()
+              editedLayer.properties.key = e.target.options.key
+              const filterFeats = features.filter(current => {
+                return current.properties.key !== layer.options.key
+              })
+              filterFeats.push(editedLayer)
+              this.props.featureSaver(filterFeats)
+              this.setState({ features: filterFeats })
+            }
+          })
+        })
 
-      e.target.bindTooltip((layer) => {
-        return `Area: ${editedArea + 'mi'}<sup>2</sup>`;
-     }
-    )
-    })
+        e.target.bindTooltip((layer) => {
+          return `Area: ${editedArea + 'mi'}<sup>2</sup>`;
+        }
+        )
+      })
     })
 
     // Checks Map layers after removal, updates map state
     map.on('pm:remove', (deletedLayer) => {
-      console.log(deletedLayer)
       const features = this.state.features ? cloneDeep(this.state.features) : []
       map.eachLayer(layer => {
         if (layer.options.key) {
           const nonDeletedLayer = layer.toGeoJSON();
-          const remainingLayers = features.filter(current => current.properties.key === layer.options.key)
+          const remainingLayers = features.filter(current => current.properties.key !== deletedLayer.layer.options.key)
           this.props.featureSaver(remainingLayers)
           this.setState({ features: remainingLayers })
-        } 
+        }
       })
       if (this.state.features.length === 1) {
         const noFeatures = features.filter(current => current.properties.key !== deletedLayer.layer.options.key)
@@ -227,22 +215,59 @@ class Map extends React.Component {
     map.on('pm:cut', (cutLayer) => {
       const newLayer = cutLayer.layer.toGeoJSON()
       const cutOutArea = addArea(newLayer.features[0])
-      
+
       cutLayer.layer.bindTooltip((layer) => {
         return `Area: ${cutOutArea + 'mi'}<sup>2</sup>`;
-     }  )
+      })
     })
+    if (this.props.features && this.state.features === null) {
+
+      this.setState({ features: this.props.features })
+      this.props.features.map(currentFeature => {
+        const savedFeature = L.GeoJSON.geometryToLayer(currentFeature).bindTooltip((layer) => {
+          const savedArea = addArea(currentFeature)
+          return `Area: ${savedArea + 'mi'}<sup>2</sup>`;
+        }
+
+        )
+        savedFeature.on('pm:edit', (e) => {
+          const editedArea = addArea(e.target.toGeoJSON())
+          const editedLayer = e.target.toGeoJSON();
+          e.target.on('pm:markerdragend', () => {
+            map.eachLayer(layer => {
+              if (layer.options.key) {
+                // const editedLayer = layer.toGeoJSON()
+                const stateFeatures = cloneDeep(this.state.features)
+                editedLayer.properties.key = e.target.options.key
+                const filterFeats = stateFeatures.filter(current => {
+                  return current.properties.key !== e.target.options.key
+                })
+                filterFeats.push(editedLayer)
+                this.props.featureSaver(filterFeats)
+                this.setState({ features: filterFeats })
+              }
+            })
+          })
+
+          e.target.bindTooltip((layer) => {
+            return `Area: ${editedArea + 'mi'}<sup>2</sup>`;
+          }
+          )
+        })
+        savedFeature.options.key = currentFeature.properties.key
+        savedFeature.addTo(map)
+      }
+      )
+    }
     this.setState({ mapState: map })
   }
-  shouldComponentUpdate(prevState, nextState){
+  shouldComponentUpdate(prevState, nextState) {
     if (isEqual(prevState.features, nextState.features)) {
-      console.log('scu', prevState, nextState)
-    return false
-  }
-  return true;
+      return false
+    }
+    return true;
   }
   render() {
-    console.log(this.props, this.state)
     return (
       <div id='mapid'></div>
     )
