@@ -66,6 +66,7 @@ class Map extends React.Component {
     const provider = new GoogleProvider({
       params: {
         // hardcoded for now, will need to pass via props
+        key: this.props.apiKey
       },
     });
     const searchControl = new GeoSearchControl({
@@ -75,10 +76,20 @@ class Map extends React.Component {
     });
     map.addControl(searchControl)
     map.on('geosearch/showlocation', (result) => {
+      // options for marker
+      // To-Do add prop to change icon for marker
+      const marker_options = {
+        draggable: false,
+      };
       const features = this.state.features !== null ? cloneDeep(this.state.features) : []
-      const marker = L.marker(result.target._lastCenter).bindTooltip(layer => {
+      const marker = L.marker(result.target._lastCenter, marker_options).bindTooltip(layer => {
         return result.location.label;
       })
+      // enable marker drawing with options
+      map.pm.enableDraw('Marker', marker_options);
+      map.pm.disableDraw('Marker');
+      // enable those options
+      marker.pm.enable(marker_options);
       const key = uuid()
       marker.options.key = key
       marker.addTo(map)
@@ -275,5 +286,6 @@ class Map extends React.Component {
 }
 Map.defaultProps = {
   featureSaver: noop,
+  apiKey: '',
 }
 export default Map
