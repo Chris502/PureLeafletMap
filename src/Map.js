@@ -3,6 +3,8 @@ import L from 'leaflet'
 import geojsonArea from 'geojson-area';
 import map from 'lodash.map';
 import min from 'lodash.min';
+import 'leaflet.pm';
+import 'leaflet-easybutton'
 import max from 'lodash.max';
 import noop from 'lodash.noop'
 import isEqual from 'lodash.isequal'
@@ -111,7 +113,7 @@ class Map extends React.Component {
       position: 'bottomleft',
       states: [{
         stateName: 'add-markers',
-        icon: 'fa-space-shuttle fa-lg',
+        icon: '<span>Satellite View</span>',
         title: 'add random markers',
         onClick: (control) => {
           if (this.state.tileLayer === 'street') this.setState({
@@ -123,7 +125,7 @@ class Map extends React.Component {
         },
 
       }, {
-        icon: 'fa-car fa-lg',
+        icon: '<span>Street View</span>',
         stateName: 'remove-markers',
         onClick: (control) => {
           if (this.state.tileLayer === 'sat') this.setState({
@@ -156,7 +158,8 @@ class Map extends React.Component {
       position: 'topright',
       drawCircle: false,
       drawPolyline: false,
-      // cutPolygon: false
+      dragMode: false,
+      cutPolygon: false
     });
 
     // Enable with options, and disable to save them.
