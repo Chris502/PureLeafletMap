@@ -7,7 +7,23 @@
     "react": "^16.8.2"
   },
   "dependencies": {
+    "css-loader": "^2.1.0",
+    "font-awesome": "^4.7.0",
+    "geojson-area": "^0.2.1",
+    "leaflet": "^1.4.0",
+    "leaflet-easybutton": "^2.4.0",
+    "leaflet-geosearch": "^2.7.0",
+    "leaflet.pm": "^2.0.2",
+    "lodash.clonedeep": "^4.5.0",
+    "lodash.flatten": "^4.4.0",
+    "lodash.isequal": "^4.5.0",
+    "lodash.map": "^4.6.0",
+    "lodash.max": "^4.0.1",
+    "lodash.min": "^4.0.1",
+    "lodash.noop": "^3.0.1",
     "react": "^16.8.2",
+    "style-loader": "^0.23.1",
+    "uuid": "^3.3.2",
     "webpack": "^4.29.5"
   },
   "scripts": {
