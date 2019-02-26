@@ -6,6 +6,10 @@
   "peerDependencies": {
     "react": "^16.8.2"
   },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/Chris502/PureLeafletMap.git"
+  },
   "dependencies": {
     "css-loader": "^2.1.0",
     "font-awesome": "^4.7.0",
