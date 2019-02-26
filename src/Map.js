@@ -99,7 +99,7 @@ class Map extends React.Component {
       geoJson.properties.key = key
       features.push(geoJson)
       this.setState({ features })
-      this.props.featureSaver(features)
+      this.props.onShapeChange(features)
     })
     const zoomToShapes = (stateFeatures) => {
       if (map) {
@@ -178,7 +178,7 @@ class Map extends React.Component {
       drawnLayer.properties.key = key
       features.push(drawnLayer)
       this.setState({ features })
-      this.props.featureSaver(this.state.features)
+      this.props.onShapeChange(this.state.features)
       layer.layer.bindTooltip((layer) => {
         return `Area: ${area + 'mi'}<sup>2</sup>`;
       }
@@ -195,7 +195,7 @@ class Map extends React.Component {
                 return current.properties.key !== layer.options.key
               })
               filterFeats.push(editedLayer)
-              this.props.featureSaver(filterFeats)
+              this.props.onShapeChange(filterFeats)
               this.setState({ features: filterFeats })
             }
           })
@@ -215,13 +215,13 @@ class Map extends React.Component {
         if (layer.options.key) {
           const nonDeletedLayer = layer.toGeoJSON();
           const remainingLayers = features.filter(current => current.properties.key !== deletedLayer.layer.options.key)
-          this.props.featureSaver(remainingLayers)
+          this.props.onShapeChange(remainingLayers)
           this.setState({ features: remainingLayers })
         }
       })
       if (this.state.features.length === 1) {
         const noFeatures = features.filter(current => current.properties.key !== deletedLayer.layer.options.key)
-        this.props.featureSaver(noFeatures)
+        this.props.onShapeChange(noFeatures)
         this.setState({ features: noFeatures })
       }
     });
@@ -257,7 +257,7 @@ class Map extends React.Component {
                   return current.properties.key !== e.target.options.key
                 })
                 filterFeats.push(editedLayer)
-                this.props.featureSaver(filterFeats)
+                this.props.onShapeChange(filterFeats)
                 this.setState({ features: filterFeats })
               }
             })
@@ -288,7 +288,7 @@ class Map extends React.Component {
   }
 }
 Map.defaultProps = {
-  featureSaver: noop,
+  onShapeChange: noop,
   apiKey: '',
 }
 export default Map
