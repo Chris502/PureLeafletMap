@@ -186,19 +186,14 @@ class Map extends React.Component {
       layer.layer.on('pm:edit', (e) => {
         const editedArea = addArea(e.target.toGeoJSON())
         const editedLayer = e.target.toGeoJSON();
+        const filterFeats = this.state.features.filter(current => {
+          return current.properties.key !== e.target.options.key
+        })
         e.target.on('pm:markerdragend', () => {
-          map.eachLayer(layer => {
-            if (layer.options.key) {
-              const editedLayer = layer.toGeoJSON()
-              editedLayer.properties.key = e.target.options.key
-              const filterFeats = features.filter(current => {
-                return current.properties.key !== layer.options.key
-              })
-              filterFeats.push(editedLayer)
-              this.props.onShapeChange(filterFeats)
-              this.setState({ features: filterFeats })
-            }
-          })
+          editedLayer.properties.key = e.target.options.key
+          filterFeats.push(editedLayer)
+          this.props.onShapeChange(filterFeats)
+          this.setState({ features: filterFeats })
         })
 
         e.target.bindTooltip((layer) => {
