@@ -3,7 +3,7 @@ React Component with using pure leaflet.js
 Currently Leaflet Geosearch used the Google Provider working on other providers.
 
 # Getting Started: 
-npm install pure-leaflet
+ `npm install pure-leaflet`
 
 
 # Props:
