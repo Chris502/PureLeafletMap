@@ -11,8 +11,6 @@
     "url" : "https://github.com/Chris502/PureLeafletMap.git"
   },
   "dependencies": {
-    "css-loader": "^2.1.0",
-    "font-awesome": "^4.7.0",
     "geojson-area": "^0.2.1",
     "leaflet": "^1.4.0",
     "leaflet-easybutton": "^2.4.0",
@@ -26,9 +24,7 @@
     "lodash.min": "^4.0.1",
     "lodash.noop": "^3.0.1",
     "react": "^16.8.2",
-    "style-loader": "^0.23.1",
-    "uuid": "^3.3.2",
-    "webpack": "^4.29.5"
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -48,6 +44,9 @@
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.5.1",
-    "webpack-cli": "^3.2.3"
+    "css-loader": "^2.1.0",
+    "style-loader": "^0.23.1",
+    "webpack-cli": "^3.2.3",
+    "webpack": "^4.29.5"
   }
 }
