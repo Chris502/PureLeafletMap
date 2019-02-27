@@ -15,6 +15,17 @@ import { GoogleProvider, GeoSearchControl } from 'leaflet-geosearch';
 import './Map.css'
 
 
+const defaultIcon = `
+<svg width="8" height="8" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="4" cy="4" r="4" stroke="red" fill="red" stroke-width="0"/>
+</svg>
+`;
+const generateIcon = (html) => new L.divIcon({
+  className: 'my-div-icon',
+  html,
+});
+
+
 const getCoords = (arr) => {
   if (!arr || !arr.length) return [];
   if (arr.length === 2 && typeof arr[1] === 'number') return [arr];
@@ -82,6 +93,7 @@ class Map extends React.Component {
       // To-Do add prop to change icon for marker
       const marker_options = {
         draggable: false,
+        icon: generateIcon(defaultIcon)
       };
       const features = this.state.features !== null ? cloneDeep(this.state.features) : []
       const marker = L.marker(result.target._lastCenter, marker_options).bindTooltip(layer => {
@@ -159,7 +171,8 @@ class Map extends React.Component {
       drawCircle: false,
       drawPolyline: false,
       dragMode: false,
-      cutPolygon: false
+      cutPolygon: false,
+      drawMarker: false,
     });
 
     // Enable with options, and disable to save them.

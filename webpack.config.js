@@ -27,9 +27,10 @@ module.exports = {
           'style-loader',
           'css-loader'
         ]
-      }
+      },
     ]
   },
+  
   externals: {
     'react': 'commonjs react'
   }

@@ -1,14 +1,14 @@
 {
   "name": "pure-leaflet",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Put a description here",
   "main": "build/Map.js",
   "peerDependencies": {
     "react": "^16.8.2"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/Chris502/PureLeafletMap.git"
+    "type": "git",
+    "url": "https://github.com/Chris502/PureLeafletMap.git"
   },
   "dependencies": {
     "geojson-area": "^0.2.1",
