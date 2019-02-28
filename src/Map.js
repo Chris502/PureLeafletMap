@@ -168,14 +168,13 @@ class Map extends React.Component {
     }).addTo(map)
 
     // Add drawcontrol to the map
-    map.pm.addControls({
+    if(this.props.editable) map.pm.addControls({
       position: 'topright',
       drawCircle: false,
       drawPolyline: false,
       dragMode: false,
       drawMarker: false,
       cutPolygon: this.props.cutMode,
-      editMode: this.props.editable
     });
 
     // Enable with options, and disable to save them.
