@@ -174,6 +174,7 @@ class Map extends React.Component {
       drawPolyline: false,
       dragMode: false,
       drawMarker: false,
+      cutPolygon: this.props.cutMode
     });
 
     // Enable with options, and disable to save them.
@@ -352,5 +353,6 @@ class Map extends React.Component {
 Map.defaultProps = {
   onShapeChange: noop,
   apiKey: '',
+  cutMode: false
 }
 export default Map
