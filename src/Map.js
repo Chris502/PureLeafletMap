@@ -58,6 +58,7 @@ const addArea = featObj => {
   const x = area / 2590000;
   return Number.parseFloat(x).toFixed(4);
 };
+const center = [38.194706, -85.71053]
 
 class Map extends React.Component {
   constructor(props) {
@@ -69,13 +70,13 @@ class Map extends React.Component {
     }
   }
   componentDidMount() {
-    const map = L.map('mapid').setView([38.194706, -85.71053
-    ], 13);
+    const map = L.map('mapid');
     const tiles = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
     });
     tiles.addTo(map)
+    if (map) map.setView(center, 13)
     const provider = new GoogleProvider({
       params: {
         // hardcoded for now, will need to pass via props
@@ -113,6 +114,7 @@ class Map extends React.Component {
       this.setState({ features })
       this.props.onShapeChange(features)
     })
+    map.pm.Draw.Cut.options = {snappable: false}
     const zoomToShapes = (stateFeatures) => {
       if (map) {
         if (stateFeatures.length > 0) {
@@ -124,29 +126,29 @@ class Map extends React.Component {
     const button = L.easyButton({
       position: 'bottomleft',
       states: [{
-        stateName: 'add-markers',
+        stateName: 'sat-view',
         icon: '<span>Satellite View</span>',
-        title: 'add random markers',
+        title: 'Switch to Satellite View',
         onClick: (control) => {
           if (this.state.tileLayer === 'street') this.setState({
             tileLayer: 'sat'
           },
             () => tiles.setUrl('https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}'))
-          control.state('remove-markers');
+          control.state('steet-view');
 
         },
 
       }, {
         icon: '<span>Street View</span>',
-        stateName: 'remove-markers',
+        stateName: 'steet-view',
         onClick: (control) => {
           if (this.state.tileLayer === 'sat') this.setState({
             tileLayer: 'street'
           },
             () => tiles.setUrl('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'))
-          control.state('add-markers');
+          control.state('sat-view');
         },
-        title: 'remove markers',
+        title: 'Switch to Street View',
 
       }]
     });
@@ -171,18 +173,20 @@ class Map extends React.Component {
       drawCircle: false,
       drawPolyline: false,
       dragMode: false,
-      cutPolygon: false,
       drawMarker: false,
     });
 
     // Enable with options, and disable to save them.
     map.pm.enableDraw('Poly', {
       allowSelfIntersection: false,
+      snapMiddle: false,
+      finishOn: 'dblclick',
     });
     map.pm.disableDraw('Poly');
 
     // Draw new shape, adds to current shapes object if present
     map.on('pm:create', (layer) => {
+
       const features = this.state.features ? cloneDeep(this.state.features) : [];
       const area = addArea(layer.layer.toGeoJSON())
       const drawnLayer = layer.layer.toGeoJSON()
@@ -222,22 +226,72 @@ class Map extends React.Component {
       map.eachLayer(layer => {
         if (layer.options.key) {
           const nonDeletedLayer = layer.toGeoJSON();
-          const remainingLayers = features.filter(current => current.properties.key !== deletedLayer.layer.options.key)
+          const remainingLayers = features.filter(current => {
+            if (current.type === 'FeatureCollection') {
+              const multiFeats = current.features[0]
+              return multiFeats.properties.key !== deletedLayer.layer.options.key
+            } else {
+              return current.properties.key !== deletedLayer.layer.options.key
+            }
+            })
           this.props.onShapeChange(remainingLayers)
           this.setState({ features: remainingLayers })
         }
       })
       if (this.state.features.length === 1) {
-        const noFeatures = features.filter(current => current.properties.key !== deletedLayer.layer.options.key)
+        const noFeatures = features.filter(current => {
+          map.eachLayer(layer => {
+            if (layer.options.key === deletedLayer.layer.options.key) map.removeLayer(layer)
+          }) 
+          if (current.type === 'FeatureCollection') {
+          const multiFeats = current.features[0]
+          return multiFeats.properties.key !== deletedLayer.layer.options.key
+        } else {
+          return current.properties.key !== deletedLayer.layer.options.key
+        }})
+
         this.props.onShapeChange(noFeatures)
         this.setState({ features: noFeatures })
       }
     });
+
+    map.on('pm:globaleditmodetoggled', e => {
+      const multiPoly = this.state.features.filter(current => current.type === "FeatureCollection")
+      multiPoly.map(currentMulti => {
+        const currentFeatures = currentMulti.features[0]
+        map.eachLayer(layer => {
+          if (layer.options.key === currentFeatures.properties.key) {
+            layer.pm.disable()
+          }
+        })
+      })
+    });
+    const cut_options = {
+      templineStyle: {color: 'darkgrey', dashedArray: [5,5]},
+      hintlineStyle: {color: 'green', dashedArray: [5,5]}
+    }
+    map.pm.Draw.Cut.enable(cut_options
+    );
+    map.pm.Draw.Cut.disable()
     // add cut method to entire map. listens for layer to be cut.
     map.on('pm:cut', (cutLayer) => {
+      
+      const mapFeatures = cloneDeep(this.state.features)
       const newLayer = cutLayer.layer.toGeoJSON()
-      const cutOutArea = addArea(newLayer.features[0])
-
+      const newFeatObj = newLayer.features[0]
+      const cutOutArea = addArea(newFeatObj)
+      newFeatObj.properties.key = cutLayer.layer.options.key
+      const nonCutLayers = mapFeatures.filter(current => {
+        if (current.type === "FeatureCollection") {
+          const multiFeature = current.features[0]
+          return multiFeature.properties.key !== cutLayer.layer.options.key
+        } else {
+          return current.properties.key !== cutLayer.layer.options.key
+        }
+      })
+      nonCutLayers.push(newLayer)
+      this.props.onShapeChange(nonCutLayers)
+      this.setState({ features: nonCutLayers})
       cutLayer.layer.bindTooltip((layer) => {
         return `Area: ${cutOutArea + 'mi'}<sup>2</sup>`;
       })
