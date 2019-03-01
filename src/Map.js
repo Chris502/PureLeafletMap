@@ -10,7 +10,7 @@ import noop from 'lodash.noop'
 import isEqual from 'lodash.isequal'
 import uuid from 'uuid/v4';
 import flatten from 'lodash.flatten';
-import cloneDeep from 'lodash.cloneDeep';
+import cloneDeep from 'lodash.clonedeep';
 import { GoogleProvider, GeoSearchControl } from 'leaflet-geosearch';
 import './Map.css'
 
