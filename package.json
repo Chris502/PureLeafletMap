@@ -1,7 +1,7 @@
 {
   "name": "pure-leaflet",
   "version": "0.0.6",
-  "description": "Put a description here",
+  "description": "Leaflet.js map",
   "main": "build/Map.js",
   "peerDependencies": {
     "react": "^16.8.2"
