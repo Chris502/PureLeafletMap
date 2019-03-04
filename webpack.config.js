@@ -2,7 +2,7 @@ var path = require('path');
 module.exports = {
   entry: './src/Map.js',
   output: {
-    path: path.resolve(__dirname, 'build'),
+    path: path.resolve(__dirname, 'dist'),
     filename: 'Map.js',
     libraryTarget: 'commonjs2' 
   },
