@@ -34,18 +34,18 @@ class Map extends React.Component {
     );
     tiles.addTo(map);
 
-    const provider = new GoogleProvider({
-      params: {
-        // hardcoded for now, will need to pass via props
-        key: this.props.apiKey
-      }
-    });
-    const searchControl = new GeoSearchControl({
-      provider,
-      animateZoom: false,
-      autoClose: true
-    });
-    map.addControl(searchControl);
+    map.addControl(
+      new GeoSearchControl({
+        provider: new GoogleProvider({
+          params: {
+            key: this.props.apiKey
+          }
+        }),
+        animateZoom: false,
+        autoClose: true
+      })
+    );
+
     map.on("geosearch/showlocation", result => {
       // options for marker
       // To-Do add prop to change icon for marker
@@ -75,7 +75,9 @@ class Map extends React.Component {
       this.setState({ features });
       this.props.onShapeChange(features);
     });
+
     map.pm.Draw.Cut.options = { snappable: false };
+
     const zoomToShapes = stateFeatures => {
       if (map) {
         if (stateFeatures.length > 0) {
@@ -84,6 +86,7 @@ class Map extends React.Component {
         }
       }
     };
+
     const button = L.easyButton({
       position: "bottomleft",
       states: [
@@ -125,6 +128,7 @@ class Map extends React.Component {
         }
       ]
     });
+
     const ZoomToShape = L.easyButton({
       position: "bottomleft",
       states: [
@@ -135,7 +139,9 @@ class Map extends React.Component {
         }
       ]
     });
+
     const buttons = [button, ZoomToShape];
+
     L.easyBar(buttons, {
       position: "bottomleft"
     }).addTo(map);
@@ -157,6 +163,7 @@ class Map extends React.Component {
       snapMiddle: false,
       finishOn: "dblclick"
     });
+
     map.pm.disableDraw("Poly");
 
     // Draw new shape, adds to current shapes object if present
@@ -248,12 +255,16 @@ class Map extends React.Component {
         });
       });
     });
+
     const cut_options = {
       templineStyle: { color: "darkgrey", dashedArray: [5, 5] },
       hintlineStyle: { color: "green", dashedArray: [5, 5] }
     };
+
     map.pm.Draw.Cut.enable(cut_options);
+
     map.pm.Draw.Cut.disable();
+
     // add cut method to entire map. listens for layer to be cut.
     map.on("pm:cut", cutLayer => {
       const mapFeatures = cloneDeep(this.state.features);
@@ -276,6 +287,7 @@ class Map extends React.Component {
         return `Area: ${cutOutArea + "mi"}<sup>2</sup>`;
       });
     });
+
     if (this.props.features && this.state.features === null) {
       this.setState({ features: this.props.features });
       this.props.features.map(currentFeature => {
@@ -312,14 +324,17 @@ class Map extends React.Component {
         savedFeature.addTo(map);
       });
     }
+
     this.setState({ mapState: map });
   }
+
   shouldComponentUpdate(prevState, nextState) {
     if (isEqual(prevState.features, nextState.features)) {
       return false;
     }
     return true;
   }
+
   render() {
     return <div id="mapid" />;
   }
