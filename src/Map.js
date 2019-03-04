@@ -9,19 +9,7 @@ import cloneDeep from "lodash.clonedeep";
 import { GoogleProvider, GeoSearchControl } from "leaflet-geosearch";
 
 import "./Map.css";
-import { getBounds, addArea } from "./helpers";
-
-const defaultIcon = `
-<svg width="8" height="8" version="1.1" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="4" cy="4" r="4" stroke="red" fill="red" stroke-width="0"/>
-</svg>
-`;
-
-const generateIcon = html =>
-  new L.divIcon({
-    className: "my-div-icon",
-    html
-  });
+import generateIcon, { getBounds, addArea } from "./helpers";
 
 class Map extends React.Component {
   state = {
@@ -31,7 +19,7 @@ class Map extends React.Component {
   };
 
   componentDidMount() {
-    const { center } = this.props;
+    const { center, marker } = this.props;
 
     const map = L.map("mapid");
     const tiles = L.tileLayer(
@@ -61,7 +49,7 @@ class Map extends React.Component {
       // To-Do add prop to change icon for marker
       const marker_options = {
         draggable: false,
-        icon: generateIcon(defaultIcon)
+        icon: generateIcon(marker)
       };
       const features =
         this.state.features !== null ? cloneDeep(this.state.features) : [];
@@ -340,7 +328,12 @@ Map.defaultProps = {
   apiKey: "",
   cutMode: false,
   editable: true,
-  center: [38.194706, -85.71053]
+  center: [38.194706, -85.71053],
+  marker: (
+    <svg width="8" height="8" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="4" cy="4" r="4" stroke="red" fill="red" stroke-width="0" />
+    </svg>
+  )
 };
 
 export default Map;

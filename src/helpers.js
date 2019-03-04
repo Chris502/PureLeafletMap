@@ -39,3 +39,11 @@ export const addArea = featObj => {
   const x = area / 2590000;
   return Number.parseFloat(x).toFixed(4);
 };
+
+const generateIcon = html =>
+  new L.divIcon({
+    className: "my-div-icon",
+    html
+  });
+
+export default generateIcon;
