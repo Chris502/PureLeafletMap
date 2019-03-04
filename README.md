@@ -75,3 +75,13 @@ _Type:_ `[lat, lng]`
 _Default:_ `[38.194706, -85.71053]`
 
 _Description:_ The starting center position for the map
+
+---
+
+# markerHtml:
+
+_Type:_ `string`
+
+_Default:_ `<svg width="8" height="8" version="1.1" xmlns="http://www.w3.org/2000/svg"> <circle cx="4" cy="4" r="4" stroke="red" fill="red" stroke-width="0" /></svg>`
+
+_Description:_ Icon for marker when searching
