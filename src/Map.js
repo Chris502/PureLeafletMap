@@ -72,7 +72,7 @@ class Map extends React.Component {
   componentDidMount() {
     const map = L.map('mapid');
     const tiles = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      attribution: 'Map data: Google &copy;',
       subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
     });
     tiles.addTo(map)
@@ -89,13 +89,14 @@ class Map extends React.Component {
       autoClose: true,
     });
     map.addControl(searchControl)
+    const marker_options = {
+      draggable: false,
+      icon: generateIcon(defaultIcon)
+    };
     map.on('geosearch/showlocation', (result) => {
       // options for marker
       // To-Do add prop to change icon for marker
-      const marker_options = {
-        draggable: false,
-        icon: generateIcon(defaultIcon)
-      };
+
       const features = this.state.features !== null ? cloneDeep(this.state.features) : []
       const marker = L.marker(result.target._lastCenter, marker_options).bindTooltip(layer => {
         return result.location.label;
@@ -114,7 +115,7 @@ class Map extends React.Component {
       this.setState({ features })
       this.props.onShapeChange(features)
     })
-    map.pm.Draw.Cut.options = {snappable: false}
+    map.pm.Draw.Cut.options = { snappable: false }
     const zoomToShapes = (stateFeatures) => {
       if (map) {
         if (stateFeatures.length > 0) {
@@ -168,7 +169,7 @@ class Map extends React.Component {
     }).addTo(map)
 
     // Add drawcontrol to the map
-    if(this.props.editable) map.pm.addControls({
+    if (this.props.editable) map.pm.addControls({
       position: 'topright',
       drawCircle: false,
       drawPolyline: false,
@@ -201,6 +202,20 @@ class Map extends React.Component {
         return `Area: ${area + 'mi'}<sup>2</sup>`;
       }
       )
+      layer.layer.on('mouseover', (event) => {
+        event.target.setStyle({
+          color: 'green',
+          opacity: 1,
+          fillOpacity: 0.2,
+        })
+      });
+      layer.layer.on('mouseout', (event) => {
+        event.target.setStyle({
+          color: '#3388FF',
+          opacity: 1,
+          fillOpacity: 0.2,
+        })
+      });
       layer.layer.on('pm:edit', (e) => {
         const editedArea = addArea(e.target.toGeoJSON())
         const editedLayer = e.target.toGeoJSON();
@@ -224,36 +239,47 @@ class Map extends React.Component {
     // Checks Map layers after removal, updates map state
     map.on('pm:remove', (deletedLayer) => {
       const features = this.state.features ? cloneDeep(this.state.features) : []
-      map.eachLayer(layer => {
-        if (layer.options.key) {
-          const nonDeletedLayer = layer.toGeoJSON();
-          const remainingLayers = features.filter(current => {
-            if (current.type === 'FeatureCollection') {
-              const multiFeats = current.features[0]
-              return multiFeats.properties.key !== deletedLayer.layer.options.key
-            } else {
-              return current.properties.key !== deletedLayer.layer.options.key
-            }
-            })
-          this.props.onShapeChange(remainingLayers)
-          this.setState({ features: remainingLayers })
-        }
-      })
-      if (this.state.features.length === 1) {
+      if (this.state.features.length === 1 ) {
+
         const noFeatures = features.filter(current => {
           map.eachLayer(layer => {
-            if (layer.options.key === deletedLayer.layer.options.key) map.removeLayer(layer)
-          }) 
+    
+            if (layer.options.key === deletedLayer.layer.options.key) {
+              
+              map.removeLayer(layer)}
+          })
           if (current.type === 'FeatureCollection') {
-          const multiFeats = current.features[0]
-          return multiFeats.properties.key !== deletedLayer.layer.options.key
-        } else {
-          return current.properties.key !== deletedLayer.layer.options.key
-        }})
+            const multiFeats = current.features[0]
+            return multiFeats.properties.key !== deletedLayer.layer.options.key
+          } else {
+            return current.properties.key !== deletedLayer.layer.options.key
+          }
+        })
 
         this.props.onShapeChange(noFeatures)
         this.setState({ features: noFeatures })
+      } else {
+
+        map.eachLayer(layer => {
+  
+
+          if (layer.options.key) {
+            const remainingLayers = features.filter(current => {
+              if (current.type === 'FeatureCollection') {
+                const multiFeats = current.features[0]
+                return multiFeats.properties.key !== deletedLayer.layer.options.key
+              } else {
+              
+                return current.properties.key !== deletedLayer.layer.options.key
+              }
+            })
+    
+            this.props.onShapeChange(remainingLayers)
+            this.setState({ features: remainingLayers })
+          }
+        })
       }
+      
     });
 
     map.on('pm:globaleditmodetoggled', e => {
@@ -268,15 +294,15 @@ class Map extends React.Component {
       })
     });
     const cut_options = {
-      templineStyle: {color: 'darkgrey', dashedArray: [5,5]},
-      hintlineStyle: {color: 'green', dashedArray: [5,5]}
+      templineStyle: { color: 'darkgrey', dashedArray: [5, 5] },
+      hintlineStyle: { color: 'green', dashedArray: [5, 5] }
     }
     map.pm.Draw.Cut.enable(cut_options
     );
     map.pm.Draw.Cut.disable()
     // add cut method to entire map. listens for layer to be cut.
     map.on('pm:cut', (cutLayer) => {
-      
+
       const mapFeatures = cloneDeep(this.state.features)
       const newLayer = cutLayer.layer.toGeoJSON()
       const newFeatObj = newLayer.features[0]
@@ -290,9 +316,23 @@ class Map extends React.Component {
           return current.properties.key !== cutLayer.layer.options.key
         }
       })
+      cutLayer.layer.on('mouseover', (event) => {
+        event.target.setStyle({
+          color: 'green',
+          opacity: 1,
+          fillOpacity: 0.2,
+        })
+      });
+      cutLayer.layer.on('mouseout', (event) => {
+        event.target.setStyle({
+          color: '#3388FF',
+          opacity: 1,
+          fillOpacity: 0.2,
+        })
+      });
       nonCutLayers.push(newLayer)
       this.props.onShapeChange(nonCutLayers)
-      this.setState({ features: nonCutLayers})
+      this.setState({ features: nonCutLayers })
       cutLayer.layer.bindTooltip((layer) => {
         return `Area: ${cutOutArea + 'mi'}<sup>2</sup>`;
       })
@@ -301,7 +341,19 @@ class Map extends React.Component {
 
       this.setState({ features: this.props.features })
       this.props.features.map(currentFeature => {
-        const savedFeature = L.GeoJSON.geometryToLayer(currentFeature).bindTooltip((layer) => {
+        if (currentFeature.geometry.type === 'Point') {
+         
+          const pointLayer = L.GeoJSON.geometryToLayer(currentFeature)
+          const pointMarker = L.marker(pointLayer._latlng, marker_options)
+          map.pm.enableDraw('Marker', marker_options);
+          map.pm.disableDraw('Marker');
+          pointMarker.options.key = currentFeature.properties.key
+          pointMarker.pm.enable(marker_options);
+          pointMarker.addTo(map)
+
+        }
+        else {
+        const savedFeature = L.GeoJSON.geometryToLayer(currentFeature, ).bindTooltip((layer) => {
           const savedArea = addArea(currentFeature)
           return `Area: ${savedArea + 'mi'}<sup>2</sup>`;
         }
@@ -332,8 +384,23 @@ class Map extends React.Component {
           )
         })
         savedFeature.options.key = currentFeature.properties.key
+        savedFeature.on('mouseover', (event) => {
+          event.target.setStyle({
+            color: 'green',
+            opacity: 1,
+            fillOpacity: 0.2,
+          })
+        });
+        savedFeature.on('mouseout', (event) => {
+            event.target.setStyle({
+            color: '#3388FF',
+            opacity: 1,
+            fillOpacity: 0.2,
+          })
+        });
         savedFeature.addTo(map)
       }
+    }
       )
     }
     this.setState({ mapState: map })
