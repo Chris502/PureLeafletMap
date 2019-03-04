@@ -60,9 +60,6 @@ class Map extends React.Component {
         marker_options
       ).bindTooltip(layer => result.location.label);
 
-      // enable marker drawing with options
-      map.pm.enableDraw("Marker", marker_options);
-      map.pm.disableDraw("Marker");
       // enable those options
       marker.pm.enable(marker_options);
       const key = uuid();
