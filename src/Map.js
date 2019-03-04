@@ -19,6 +19,7 @@ const defaultIcon = `
   <circle cx="4" cy="4" r="4" stroke="red" fill="red" stroke-width="0"/>
 </svg>
 `;
+
 const generateIcon = html =>
   new L.divIcon({
     className: "my-div-icon",
@@ -59,17 +60,17 @@ const addArea = featObj => {
   const x = area / 2590000;
   return Number.parseFloat(x).toFixed(4);
 };
+
+// Should this be a prop?
 const center = [38.194706, -85.71053];
 
 class Map extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      features: null,
-      mapState: null,
-      tileLayer: "street"
-    };
-  }
+  state = {
+    features: null,
+    mapState: null,
+    tileLayer: "street"
+  };
+
   componentDidMount() {
     const map = L.map("mapid");
     const tiles = L.tileLayer(
@@ -369,7 +370,6 @@ class Map extends React.Component {
     return true;
   }
   render() {
-    console.log("rendering...");
     return <div id="mapid" />;
   }
 }
