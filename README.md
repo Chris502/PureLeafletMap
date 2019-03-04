@@ -1,28 +1,67 @@
 # PureLeafletMap
-A React map component that allows geoJSON shapes to be drawn, edited, and loaded into leaflet layers. Built with leaflet.js and leaflet.pm
-Currently Leaflet Geosearch uses the Google Provider working on other providers.
 
-# Getting Started: 
- `npm install pure-leaflet`
+A React map component that allows geoJSON shapes to be drawn, edited, and loaded into leaflet layers
 
-### Usage
+Built with leaflet.js and leaflet.pm
 
-``` import Map from 'pure-leaflet' ```
+Leaflet Geosearch uses the Google Provider
+
+# Getting Started:
+
+`npm install pure-leaflet`
+
+# Usage
+
+`import Map from 'pure-leaflet'`
 
 # Props:
 
-### editable: boolean
-Toggle edit/draw control.
+## editable
 
-### cutMode: boolean 
-Requires: editable: true
-toggles ability to cut polygons/shapes
+_Type:_ `boolean`
 
-### onShapeChange: 
-(layers) => {} : fired when a shape is drawn/edited on map. returns : Array<{geoJSON}> ...[{geoJSON}, {geoJSON}]
+_Default:_ `true`
 
-### features: 
-Array<{geoJSON}> accepts an array of geoJSON features to be loaded/drawn on to map on load.
+_Description:_ Toggle edit/draw control
+
+---
+
+## cutMode
+
+_Type:_ `boolean`
+
+_Default_: `false`
+
+_Requires_: `editable: true`
+
+_Description:_ Toggles ability to cut polygons/shapes
+
+---
+
+### onShapeChange
+
+_Type:_ `(Array<geoJSON>) => {}`
+
+_Default:_ `noop`
+
+_Description:_ Fired when a shape is drawn/edited on map
+
+---
+
+### features:
+
+_Type:_ `Array<geoJSON>`
+
+_Default:_ `null`
+
+_Description_: Array of geoJSON features to be drawn on the map
+
+---
 
 ### apiKey:
-API key for google maps. More providers are coming.
+
+_Type:_ `string`
+
+_Default:_ `''`
+
+_Description:_ API key for Google maps
