@@ -22,6 +22,8 @@ class Map extends React.Component {
     const { center, markerHtml } = this.props;
 
     const map = L.map("mapid");
+    map.setView(center, 13);
+
     const tiles = L.tileLayer(
       "https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
       {
@@ -31,7 +33,7 @@ class Map extends React.Component {
       }
     );
     tiles.addTo(map);
-    if (map) map.setView(center, 13);
+
     const provider = new GoogleProvider({
       params: {
         // hardcoded for now, will need to pass via props
