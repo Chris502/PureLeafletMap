@@ -19,7 +19,7 @@ class Map extends React.Component {
   };
 
   componentDidMount() {
-    const { center, marker } = this.props;
+    const { center, markerHtml } = this.props;
 
     const map = L.map("mapid");
     const tiles = L.tileLayer(
@@ -49,7 +49,7 @@ class Map extends React.Component {
       // To-Do add prop to change icon for marker
       const marker_options = {
         draggable: false,
-        icon: generateIcon(marker)
+        icon: generateIcon(markerHtml)
       };
       const features =
         this.state.features !== null ? cloneDeep(this.state.features) : [];
@@ -329,7 +329,7 @@ Map.defaultProps = {
   cutMode: false,
   editable: true,
   center: [38.194706, -85.71053],
-  marker:
+  markerHtml:
     '<svg width="8" height="8" version="1.1" xmlns="http://www.w3.org/2000/svg"> <circle cx="4" cy="4" r="4" stroke="red" fill="red" stroke-width="0" /></svg>'
 };
 
