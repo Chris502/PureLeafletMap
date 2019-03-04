@@ -50,8 +50,6 @@ class Map extends React.Component {
     );
 
     map.on("geosearch/showlocation", result => {
-      // options for marker
-      // To-Do add prop to change icon for marker
       const marker_options = {
         draggable: false,
         icon: generateIcon(markerHtml)
