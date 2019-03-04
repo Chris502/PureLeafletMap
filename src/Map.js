@@ -55,15 +55,10 @@ class Map extends React.Component {
         icon: generateIcon(markerHtml)
       };
 
-      const features =
-        this.state.features !== null ? cloneDeep(this.state.features) : [];
-
       const marker = L.marker(
         result.target._lastCenter,
         marker_options
-      ).bindTooltip(layer => {
-        return result.location.label;
-      });
+      ).bindTooltip(layer => result.location.label);
 
       // enable marker drawing with options
       map.pm.enableDraw("Marker", marker_options);
@@ -75,6 +70,10 @@ class Map extends React.Component {
       marker.addTo(map);
       const geoJson = marker.toGeoJSON();
       geoJson.properties.key = key;
+
+      // Update features with new point
+      const features =
+        this.state.features !== null ? cloneDeep(this.state.features) : [];
       features.push(geoJson);
       this.setState({ features });
       this.props.onShapeChange(features);
