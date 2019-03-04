@@ -78,7 +78,7 @@ _Description:_ The starting center position for the map
 
 ---
 
-# markerHtml:
+### markerHtml:
 
 _Type:_ `string`
 
