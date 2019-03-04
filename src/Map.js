@@ -124,11 +124,9 @@ class Map extends React.Component {
     });
 
     const zoomToShapes = stateFeatures => {
-      if (map) {
-        if (stateFeatures.length > 0) {
-          const bounds = getBounds(stateFeatures);
-          map.fitBounds(bounds);
-        }
+      if (stateFeatures.length > 0) {
+        const bounds = getBounds(stateFeatures);
+        map.fitBounds(bounds);
       }
     };
 
