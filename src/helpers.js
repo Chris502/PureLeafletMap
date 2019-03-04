@@ -5,7 +5,7 @@ import geojsonArea from "geojson-area";
 import map from "lodash.map";
 import min from "lodash.min";
 
-export const getCoords = arr => {
+const getCoords = arr => {
   if (!arr || !arr.length) return [];
   if (arr.length === 2 && typeof arr[1] === "number") return [arr];
   if (arr[0].length && typeof arr[0][1] === "number") return arr;
