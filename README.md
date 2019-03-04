@@ -5,6 +5,9 @@ Currently Leaflet Geosearch uses the Google Provider working on other providers.
 # Getting Started: 
  `npm install pure-leaflet`
 
+### Usage
+
+``` import Map from 'pure-leaflet' ```
 
 # Props:
 
