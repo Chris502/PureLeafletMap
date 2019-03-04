@@ -54,14 +54,17 @@ class Map extends React.Component {
         draggable: false,
         icon: generateIcon(markerHtml)
       };
+
       const features =
         this.state.features !== null ? cloneDeep(this.state.features) : [];
+
       const marker = L.marker(
         result.target._lastCenter,
         marker_options
       ).bindTooltip(layer => {
         return result.location.label;
       });
+
       // enable marker drawing with options
       map.pm.enableDraw("Marker", marker_options);
       map.pm.disableDraw("Marker");
