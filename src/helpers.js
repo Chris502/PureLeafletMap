@@ -40,10 +40,12 @@ export const addArea = featObj => {
   return Number.parseFloat(x).toFixed(4);
 };
 
-const generateIcon = html =>
-  new L.divIcon({
+const generateIcon = html => {
+  console.log({ html });
+  return new L.divIcon({
     className: "my-div-icon",
     html
   });
+};
 
 export default generateIcon;
