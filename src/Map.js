@@ -21,7 +21,10 @@ class Map extends React.Component {
   componentDidMount() {
     const { center, markerHtml } = this.props;
 
+    // Initialize map to render at the ID returned from this class
     const map = L.map("mapid");
+
+    // Set initial view at the center prop with a zoom level of 13
     map.setView(center, 13);
 
     const tiles = L.tileLayer(
