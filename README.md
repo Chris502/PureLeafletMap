@@ -65,3 +65,13 @@ _Type:_ `string`
 _Default:_ `''`
 
 _Description:_ API key for Google maps
+
+---
+
+### center:
+
+_Type:_ `[lat, lng]`
+
+_Default:_ `[38.194706, -85.71053]`
+
+_Description:_ The starting center position for the map

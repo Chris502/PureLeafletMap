@@ -1,18 +1,15 @@
 import React from "react";
 import L from "leaflet";
-import geojsonArea from "geojson-area";
-import map from "lodash.map";
-import min from "lodash.min";
 import "leaflet.pm";
 import "leaflet-easybutton";
-import max from "lodash.max";
 import noop from "lodash.noop";
 import isEqual from "lodash.isequal";
 import uuid from "uuid/v4";
-import flatten from "lodash.flatten";
 import cloneDeep from "lodash.clonedeep";
 import { GoogleProvider, GeoSearchControl } from "leaflet-geosearch";
+
 import "./Map.css";
+import { getBounds, addArea } from "./helpers";
 
 const defaultIcon = `
 <svg width="8" height="8" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -26,44 +23,6 @@ const generateIcon = html =>
     html
   });
 
-const getCoords = arr => {
-  if (!arr || !arr.length) return [];
-  if (arr.length === 2 && typeof arr[1] === "number") return [arr];
-  if (arr[0].length && typeof arr[0][1] === "number") return arr;
-  if (arr[0][0].length && typeof arr[0][0][1] === "number")
-    return getCoords(flatten(arr));
-  if (arr[0][0][0].length && typeof arr[0][0][0][1] === "number")
-    return getCoords(flatten(arr));
-  return arr;
-};
-
-const getBounds = (polygons, points) => {
-  if (polygons.length === 0 && points.length === 0) return [35, -83];
-  let coords = [];
-  map(polygons, poly => {
-    coords = coords.concat(getCoords(poly.geometry.coordinates));
-  });
-  const lats = [];
-  const longs = [];
-  map(coords, coord => {
-    lats.push(coord[1]);
-    longs.push(coord[0]);
-  });
-  const c1 = L.latLng(max(lats), max(longs));
-  const c2 = L.latLng(min(lats), min(longs));
-  return L.latLngBounds(c1, c2);
-};
-
-const addArea = featObj => {
-  const { geometry } = featObj;
-  const area = geojsonArea.geometry(geometry);
-  const x = area / 2590000;
-  return Number.parseFloat(x).toFixed(4);
-};
-
-// Should this be a prop?
-const center = [38.194706, -85.71053];
-
 class Map extends React.Component {
   state = {
     features: null,
@@ -72,6 +31,8 @@ class Map extends React.Component {
   };
 
   componentDidMount() {
+    const { center } = this.props;
+
     const map = L.map("mapid");
     const tiles = L.tileLayer(
       "https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
@@ -378,7 +339,8 @@ Map.defaultProps = {
   onShapeChange: noop,
   apiKey: "",
   cutMode: false,
-  editable: true
+  editable: true,
+  center: [38.194706, -85.71053]
 };
 
 export default Map;
