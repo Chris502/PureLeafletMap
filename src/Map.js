@@ -81,15 +81,6 @@ class Map extends React.Component {
 
     map.pm.Draw.Cut.options = { snappable: false };
 
-    const zoomToShapes = stateFeatures => {
-      if (map) {
-        if (stateFeatures.length > 0) {
-          const bounds = getBounds(stateFeatures);
-          map.fitBounds(bounds);
-        }
-      }
-    };
-
     const button = L.easyButton({
       position: "bottomleft",
       states: [
@@ -131,6 +122,15 @@ class Map extends React.Component {
         }
       ]
     });
+
+    const zoomToShapes = stateFeatures => {
+      if (map) {
+        if (stateFeatures.length > 0) {
+          const bounds = getBounds(stateFeatures);
+          map.fitBounds(bounds);
+        }
+      }
+    };
 
     const ZoomToShape = L.easyButton({
       position: "bottomleft",
