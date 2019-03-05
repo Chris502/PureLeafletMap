@@ -48,12 +48,11 @@ class Map extends React.Component {
         autoClose: true
       })
     );
-
+    const marker_options = {
+      draggable: false,
+      icon: generateIcon(markerHtml)
+    };
     map.on("geosearch/showlocation", result => {
-      const marker_options = {
-        draggable: false,
-        icon: generateIcon(markerHtml)
-      };
 
       const marker = L.marker(
         result.target._lastCenter,
@@ -180,6 +179,20 @@ class Map extends React.Component {
       layer.layer.bindTooltip(layer => {
         return `Area: ${area + "mi"}<sup>2</sup>`;
       });
+      layer.layer.on('mouseover', (event) => {
+        event.target.setStyle({
+          color: 'green',
+          opacity: 1,
+          fillOpacity: 0.2,
+        })
+      });
+      layer.layer.on('mouseout', (event) => {
+        event.target.setStyle({
+          color: '#3388FF',
+          opacity: 1,
+          fillOpacity: 0.2,
+        })
+      });
       layer.layer.on("pm:edit", e => {
         const editedArea = addArea(e.target.toGeoJSON());
         const editedLayer = e.target.toGeoJSON();
@@ -238,6 +251,7 @@ class Map extends React.Component {
         this.props.onShapeChange(noFeatures);
         this.setState({ features: noFeatures });
       }
+
     });
 
     map.on("pm:globaleditmodetoggled", e => {
@@ -277,53 +291,98 @@ class Map extends React.Component {
         } else {
           return current.properties.key !== cutLayer.layer.options.key;
         }
+      })
+      cutLayer.layer.on('mouseover', (event) => {
+        event.target.setStyle({
+          color: 'green',
+          opacity: 1,
+          fillOpacity: 0.2,
+        })
       });
-      nonCutLayers.push(newLayer);
-      this.props.onShapeChange(nonCutLayers);
-      this.setState({ features: nonCutLayers });
-      cutLayer.layer.bindTooltip(layer => {
-        return `Area: ${cutOutArea + "mi"}<sup>2</sup>`;
+      cutLayer.layer.on('mouseout', (event) => {
+        event.target.setStyle({
+          color: '#3388FF',
+          opacity: 1,
+          fillOpacity: 0.2,
+        })
       });
-    });
-
+      nonCutLayers.push(newLayer)
+      this.props.onShapeChange(nonCutLayers)
+      this.setState({ features: nonCutLayers })
+      cutLayer.layer.bindTooltip((layer) => {
+        return `Area: ${cutOutArea + 'mi'}<sup>2</sup>`;
+      })
+    })
     if (this.props.features && this.state.features === null) {
-      this.setState({ features: this.props.features });
-      this.props.features.map(currentFeature => {
-        const savedFeature = L.GeoJSON.geometryToLayer(
-          currentFeature
-        ).bindTooltip(layer => {
-          const savedArea = addArea(currentFeature);
-          return `Area: ${savedArea + "mi"}<sup>2</sup>`;
-        });
-        savedFeature.on("pm:edit", e => {
-          const editedArea = addArea(e.target.toGeoJSON());
-          const editedLayer = e.target.toGeoJSON();
-          e.target.on("pm:markerdragend", () => {
-            map.eachLayer(layer => {
-              if (layer.options.key) {
-                // const editedLayer = layer.toGeoJSON()
-                const stateFeatures = cloneDeep(this.state.features);
-                editedLayer.properties.key = e.target.options.key;
-                const filterFeats = stateFeatures.filter(current => {
-                  return current.properties.key !== e.target.options.key;
+
+      if (this.props.features && this.state.features === null) {
+        this.setState({ features: this.props.features });
+        this.props.features.map(currentFeature => {
+          if (currentFeature.geometry.type === 'Point') {
+
+            const pointLayer = L.GeoJSON.geometryToLayer(currentFeature)
+            const pointMarker = L.marker(pointLayer._latlng, marker_options)
+            map.pm.enableDraw('Marker', marker_options);
+            map.pm.disableDraw('Marker');
+            pointMarker.options.key = currentFeature.properties.key
+            pointMarker.pm.enable(marker_options);
+            pointMarker.addTo(map)
+
+          }
+          else {
+            const savedFeature = L.GeoJSON.geometryToLayer(currentFeature).bindTooltip((layer) => {
+              const savedArea = addArea(currentFeature)
+              return `Area: ${savedArea + 'mi'}<sup>2</sup>`;
+            }
+
+            )
+            savedFeature.on('pm:edit', (e) => {
+              const editedArea = addArea(e.target.toGeoJSON())
+              const editedLayer = e.target.toGeoJSON();
+              e.target.on("pm:markerdragend", () => {
+                map.eachLayer(layer => {
+                  if (layer.options.key) {
+                    // const editedLayer = layer.toGeoJSON()
+                    const stateFeatures = cloneDeep(this.state.features);
+                    editedLayer.properties.key = e.target.options.key;
+                    const filterFeats = stateFeatures.filter(current => {
+                      return current.properties.key !== e.target.options.key;
+                    });
+                    filterFeats.push(editedLayer);
+                    this.props.onShapeChange(filterFeats);
+                    this.setState({ features: filterFeats });
+                  }
                 });
-                filterFeats.push(editedLayer);
-                this.props.onShapeChange(filterFeats);
-                this.setState({ features: filterFeats });
+              });
+
+              e.target.bindTooltip((layer) => {
+                return `Area: ${editedArea + 'mi'}<sup>2</sup>`;
               }
+              )
+            })
+            savedFeature.options.key = currentFeature.properties.key
+            savedFeature.on('mouseover', (event) => {
+              event.target.setStyle({
+                color: 'green',
+                opacity: 1,
+                fillOpacity: 0.2,
+              })
             });
-          });
+            savedFeature.on('mouseout', (event) => {
+              event.target.setStyle({
+                color: '#3388FF',
+                opacity: 1,
+                fillOpacity: 0.2,
+              })
+            });
+            savedFeature.addTo(map)
+          }
+        }
+        )
+      }
 
-          e.target.bindTooltip(layer => {
-            return `Area: ${editedArea + "mi"}<sup>2</sup>`;
-          });
-        });
-        savedFeature.options.key = currentFeature.properties.key;
-        savedFeature.addTo(map);
-      });
+      this.setState({ mapState: map });
     }
-
-    this.setState({ mapState: map });
   }
 
   shouldComponentUpdate(prevState, nextState) {
