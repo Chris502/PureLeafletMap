@@ -1,7 +1,7 @@
 {
   "name": "pure-leaflet",
   "version": "0.0.12",
-  "description": "Put a description here",
+  "description": "A React map component that allows geoJSON shapes to be drawn, edited, and loaded into leaflet layers",
   "main": "dist/Map.js",
   "peerDependencies": {
     "react": "^16.8.2"
@@ -23,7 +23,6 @@
     "lodash.max": "^4.0.1",
     "lodash.min": "^4.0.1",
     "lodash.noop": "^3.0.1",
-    "react": "^16.8.2",
     "uuid": "^3.3.2"
   },
   "scripts": {
@@ -37,6 +36,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.3.3",
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
     "@babel/preset-env": "^7.3.1",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
@@ -45,8 +45,9 @@
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.5.1",
     "css-loader": "^2.1.0",
+    "react": "^16.8.2",
     "style-loader": "^0.23.1",
-    "webpack-cli": "^3.2.3",
-    "webpack": "^4.29.5"
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3"
   }
 }
