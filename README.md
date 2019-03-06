@@ -57,6 +57,22 @@ _Default:_ `null`
 _Description_: Array of geoJSON features to be drawn on the map
 
 ---
+### searchProvider:
+
+_Type:_ `string`
+
+_Default:_ `google`
+
+_Supported Providers:_
+
+ - ESRI: `esri`
+ - GoogleMaps*: `google`
+ - Open Street maps: `openstreet`
+ - LocationIQ*: `loqIQ`
+ - Bing*: `bing`
+ - Open Cage: `opencage`
+
+* providers need an API key for access
 
 ### apiKey:
 
