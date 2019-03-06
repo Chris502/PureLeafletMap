@@ -10,6 +10,7 @@ import { GoogleProvider, GeoSearchControl } from "leaflet-geosearch";
 
 import "./Map.css";
 import generateIcon, { getBounds, addArea } from "./helpers";
+import providerSwitch from './providers';
 
 class Map extends React.Component {
   state = {
@@ -26,7 +27,7 @@ class Map extends React.Component {
 
     // Set initial view at the center prop with a zoom level of 13
     map.setView(center, 13);
-
+    const provider = providerSwitch(this.props.searchProvider, this.props.apiKey)
     const tiles = L.tileLayer(
       "https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
       {
@@ -36,18 +37,15 @@ class Map extends React.Component {
       }
     );
     tiles.addTo(map);
-
-    map.addControl(
-      new GeoSearchControl({
-        provider: new GoogleProvider({
-          params: {
-            key: this.props.apiKey
-          }
-        }),
-        animateZoom: false,
-        autoClose: true
-      })
-    );
+    if (provider) {
+      map.addControl(
+        new GeoSearchControl({
+          provider,
+          animateZoom: false,
+          autoClose: true
+        })
+      );
+    }
     const marker_options = {
       draggable: false,
       icon: generateIcon(markerHtml)
@@ -404,7 +402,8 @@ Map.defaultProps = {
   editable: true,
   center: [38.194706, -85.71053],
   markerHtml:
-    '<svg width="8" height="8" version="1.1" xmlns="http://www.w3.org/2000/svg"> <circle cx="4" cy="4" r="4" stroke="red" fill="red" stroke-width="0" /></svg>'
+    '<svg width="8" height="8" version="1.1" xmlns="http://www.w3.org/2000/svg"> <circle cx="4" cy="4" r="4" stroke="red" fill="red" stroke-width="0" /></svg>',
+  searchProvider: 'google'
 };
 
 export default Map;
