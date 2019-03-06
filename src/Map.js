@@ -32,7 +32,7 @@ class Map extends React.Component {
       "https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
       {
         attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          '&copy; MapData: Google',
         subdomains: ["mt0", "mt1", "mt2", "mt3"]
       }
     );
