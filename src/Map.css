@@ -211,7 +211,8 @@
 .leaflet-control-geosearch a.reset:hover {
   background: #f5f5f5;
 }
-#mapid {
+
+div[id^='mapid'] {
   height: 600px;
 }
 
