@@ -6,8 +6,7 @@ import noop from "lodash.noop";
 import isEqual from "lodash.isequal";
 import uuid from "uuid/v4";
 import cloneDeep from "lodash.clonedeep";
-import { GoogleProvider, GeoSearchControl } from "leaflet-geosearch";
-
+import { GeoSearchControl } from "leaflet-geosearch";
 import "./Map.css";
 import generateIcon, { getBounds, addArea } from "./helpers";
 import providerSwitch from './providers';

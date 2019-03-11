@@ -103,7 +103,7 @@ _Default:_ `<svg width="8" height="8" version="1.1" xmlns="http://www.w3.org/200
 _Description:_ Icon for marker when searching
 
 
-###mapCount:
+### mapCount:
 _Type:_ `number`
 
 _Default:_ `''`
