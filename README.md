@@ -101,3 +101,11 @@ _Type:_ `string`
 _Default:_ `<svg width="8" height="8" version="1.1" xmlns="http://www.w3.org/2000/svg"> <circle cx="4" cy="4" r="4" stroke="red" fill="red" stroke-width="0" /></svg>`
 
 _Description:_ Icon for marker when searching
+
+
+### mapCount:
+_Type:_ `number`
+
+_Default:_ `''`
+
+_Description:_ Interger to render more than 1 map on the same page. (i.e.... `mapCount={1}` makes Map Div ID:`mapid1`)

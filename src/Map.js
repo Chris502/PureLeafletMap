@@ -6,8 +6,7 @@ import noop from "lodash.noop";
 import isEqual from "lodash.isequal";
 import uuid from "uuid/v4";
 import cloneDeep from "lodash.clonedeep";
-import { GoogleProvider, GeoSearchControl } from "leaflet-geosearch";
-
+import { GeoSearchControl } from "leaflet-geosearch";
 import "./Map.css";
 import generateIcon, { getBounds, addArea } from "./helpers";
 import providerSwitch from './providers';
@@ -23,7 +22,7 @@ class Map extends React.Component {
     const { center, markerHtml } = this.props;
 
     // Initialize map to render at the ID returned from this class
-    const map = L.map("mapid");
+    const map = L.map(!this.props.mapCount ? "mapid" : `mapid ${this.props.mapCount.toString()}`);
 
     // Set initial view at the center prop with a zoom level of 13
     map.setView(center, 13);
@@ -379,11 +378,12 @@ class Map extends React.Component {
         )
       }
 
-      this.setState({ mapState: map });
+      this.setState({ mapState: map }, () => {
+        setTimeout(function(){ map.invalidateSize()}, 100)
+      });
     }
   }
-
-  shouldComponentUpdate(prevState, nextState) {
+  shouldComponentUpdate(prevState, nextState, nextProps, prevProps) {
     if (isEqual(prevState.features, nextState.features)) {
       return false;
     }
@@ -391,7 +391,8 @@ class Map extends React.Component {
   }
 
   render() {
-    return <div id="mapid" />;
+    const mapid = `mapid${!this.props.mapCount ? '' : ` ${this.props.mapCount.toString()}`}`
+    return <div id={mapid} className='mapbox'/>;
   }
 }
 
