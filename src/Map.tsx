@@ -1,5 +1,5 @@
-import React from "react";
-import L from "leaflet";
+import * as React from "react";
+import * as L  from "leaflet";
 import "leaflet.pm";
 import "leaflet-easybutton";
 import noop from "lodash.noop";
@@ -10,9 +10,19 @@ import { GeoSearchControl } from "leaflet-geosearch";
 import "./Map.css";
 import generateIcon, { getBounds, addArea } from "./helpers";
 import providerSwitch from './providers';
+type MapProps = {
+  onShapeChange(): (feature: Array<any>) => Array<any>,
+  apiKey: string,
+  cutMode: boolean,
+  editable: boolean,
+  center: Array<string>,
+  markerHtml: string,
+  searchProvider: string
+};
 
-class Map extends React.Component {
-  state = {
+
+class Map extends React.Component <{}, MapProps > {
+ readonly state = {
     features: null,
     mapState: null,
     tileLayer: "street"
@@ -49,7 +59,7 @@ class Map extends React.Component {
       draggable: false,
       icon: generateIcon(markerHtml)
     };
-    map.on("geosearch/showlocation", result => {
+      map.on("geosearch/showlocation", (result: any) => {
 
       const marker = L.marker(
         result.target._lastCenter,
@@ -383,7 +393,7 @@ class Map extends React.Component {
       });
     }
   }
-  shouldComponentUpdate(prevState, nextState, nextProps, prevProps) {
+  shouldComponentUpdate(prevState: any, nextState: any) {
     if (isEqual(prevState.features, nextState.features)) {
       return false;
     }
@@ -396,15 +406,6 @@ class Map extends React.Component {
   }
 }
 
-Map.defaultProps = {
-  onShapeChange: noop,
-  apiKey: "",
-  cutMode: false,
-  editable: true,
-  center: [38.194706, -85.71053],
-  markerHtml:
-    '<svg width="8" height="8" version="1.1" xmlns="http://www.w3.org/2000/svg"> <circle cx="4" cy="4" r="4" stroke="red" fill="red" stroke-width="0" /></svg>',
-  searchProvider: 'google'
-};
+
 
 export default Map;
