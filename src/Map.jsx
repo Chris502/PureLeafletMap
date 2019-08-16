@@ -392,7 +392,7 @@ class Map extends React.Component {
 
   render() {
     const mapid = `mapid${!this.props.mapCount ? '' : ` ${this.props.mapCount.toString()}`}`
-    return <div id={mapid} className='mapbox'/>;
+    return (<div id={mapid} className='mapbox'/>);
   }
 }
 
