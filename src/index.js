@@ -1,4 +1,4 @@
-import Map16 from './Map.jsx'
+import Map from './Map.jsx'
 
 export {
     Map
