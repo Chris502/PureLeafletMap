@@ -1,8 +1,9 @@
 {
   "name": "pure-leaflet",
-  "version": "0.0.17",
+  "version": "0.0.17.3",
   "description": "A React map component that allows geoJSON shapes to be drawn, edited, and loaded into leaflet layers",
   "main": "dist/Map.js",
+  "types": "dist/index.d.ts",
   "peerDependencies": {
     "react": "^16.8.2"
   },

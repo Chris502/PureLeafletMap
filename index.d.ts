@@ -1,7 +1,7 @@
 import { GeoJSON } from 'geojson';
 import React from 'react';
 
-    export interface MapProps {
+export interface MapProps {
         editable: boolean;
         cutMode?: boolean;
         onShapeChange: (feature: GeoJSON) => Array<GeoJSON>;
@@ -13,4 +13,4 @@ import React from 'react';
         mapCount: number;
     }: JSX.Element
 declare const Map: React.SFC<MapProps>
-export default Map
+export default {Map}
