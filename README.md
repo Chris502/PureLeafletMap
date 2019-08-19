@@ -6,6 +6,8 @@ Built with leaflet.js and leaflet.pm
 
 Leaflet Geosearch uses the Google Provider
 
+Check `index.d.ts` to see the props.
+
 # Getting Started:
 
 `npm install pure-leaflet`
