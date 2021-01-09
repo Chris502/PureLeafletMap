@@ -41,9 +41,11 @@ export const addArea = featObj => {
 };
 
 const generateIcon = html =>
-  new L.divIcon({
+  {const marker = L.divIcon({
     className: "my-div-icon",
+    iconSize: [20, 20],
     html
-  });
+  })
+return marker};
 
 export default generateIcon;
