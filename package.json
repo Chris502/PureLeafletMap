@@ -27,6 +27,7 @@
     "lodash.max": "^4.0.1",
     "lodash.min": "^4.0.1",
     "lodash.noop": "^3.0.1",
+    "react-refresh": "^0.9.0",
     "uuid": "^3.3.2"
   },
   "scripts": {

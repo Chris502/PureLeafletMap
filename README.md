@@ -110,4 +110,26 @@ _Type:_ `number`
 
 _Default:_ `''`
 
-_Description:_ Interger to render more than 1 map on the same page. (i.e.... `mapCount={1}` makes Map Div ID:`mapid1`)
+_Description:_ Interger to render more than 1 map on the same page. (i.e....
+`mapCount={1}` makes Map Div ID:`mapid1`)
+
+### getBounding: 
+_Type:_ `Function`
+
+_Default:_`false`
+
+_Description:_ Function that returns the bounding box of the current visible
+map.
+
+_Example_: `(data) => data` where data is: 
+```{
+  "_southWest": {
+    "lat": 37.54239958054067,
+    "lng": -99.90966796875001
+  },
+  "_northEast": {
+    "lat": 39.404366615861036,
+    "lng": -96.40777587890625
+  }
+}```
+
