@@ -23,7 +23,7 @@ export interface MapProps {
     center?: Array<number>;
     markerHtml?: string;
     mapCount?: number;
-    getBounding?: () => Array<LatType>;
+    getBounding?: (data?: LatType) => void;
 }
 declare class Map extends React.Component<MapProps, any> {}
 export default Map
