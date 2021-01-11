@@ -377,7 +377,10 @@ class Map extends React.Component {
         }
         )
       }
-
+      if (this.props.getBounding) {
+        this.props.getBounding(map.getBounds())
+        map.on('zoomend', () => this.props.getBounding(map.getBounds()))
+}
       this.setState({ mapState: map }, () => {
         setTimeout(function(){ map.invalidateSize()}, 100)
       });

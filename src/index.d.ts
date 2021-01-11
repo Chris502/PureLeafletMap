@@ -1,6 +1,16 @@
 import { GeoJSON } from 'geojson';
 import React from 'react';
 
+type LatType = {
+        northeast: {
+                lat: Number,
+                lng: Number,
+        },
+        southwest: {
+                lat: Number,
+                lng: Number,
+        }
+}
 export interface MapProps<> {
         editable: boolean;
         cutMode?: boolean;
@@ -11,6 +21,7 @@ export interface MapProps<> {
         center: Array<number>;
         markerHtml: string;
         mapCount: number;
+        getBounding?: () => Array<LatType>;
 }
 declare const Map: React.Component<MapProps>
 export default Map
