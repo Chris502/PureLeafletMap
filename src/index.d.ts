@@ -21,7 +21,7 @@ export interface MapProps<> {
         center: Array<number>;
         markerHtml: string;
         mapCount: number;
-        getBounding?: () => Array<LatType>;
+        getBounding?: (data?: LatType) => void
 }
 declare const Map: React.Component<MapProps>
 export default Map
