@@ -396,7 +396,6 @@ class Map extends React.Component {
     return true;
   }
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.providerInput, this.props.providerInput)
     if (nextProps.providerInput !== this.props.providerInput) {
       const openStreet = new OpenStreetMapProvider({ params: {countrycodes: 'us'}})
       const result = openStreet.search({ query: nextProps.providerInput}).then((result) => this.props.providerResults(result))
