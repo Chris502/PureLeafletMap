@@ -3,23 +3,33 @@ import React from 'react';
 
 type LatType = {
         northeast: {
-                lat: Number,
-                lng: Number,
+                lat: Number
+                lng: Number
         },
         southwest: {
-                lat: Number,
-                lng: Number,
+                lat: Number
+                lng: Number
         }
 }
+type RawType = {
+        boundingbox: string[]
+        class: string
+        display_name: string
+        importance: number
+        lat: string
+        license: string
+        lon: string
+        osm_id: number
+        osm_type: string
+        place_id: number
+        type: string
+}
 type ResultType = {
-        x: Number, // lon,
-        y: Number, // lat,
-        label: String, // formatted address
-        bounds: [
-                [Number, Number], // s, w - lat, lon
-                [Number, Number], // n, e - lat, lon
-        ],
-        raw: {}, // raw provider result
+        x: string // lon,
+        y: string // lat,
+        label: string // formatted address
+        bounds: string[][]
+        raw: RawType // raw provider result
 };
 export interface MapProps<> {
         editable: boolean;
@@ -32,7 +42,7 @@ export interface MapProps<> {
         markerHtml: string;
         mapCount: number;
         getBounding?: (data?: LatType) => void;
-        providerResults?: (data: ResultType[]) => void;
+        providerResults: (data: ResultType[] | []) => void;
         providerInput?: string;
 }
 declare const Map: React.Component<MapProps>
