@@ -10,6 +10,8 @@ import { GeoSearchControl } from "leaflet-geosearch";
 import "./Map.css";
 import generateIcon, { getBounds, addArea } from "./helpers";
 import providerSwitch from './providers';
+import { OpenStreetMapProvider } from 'leaflet-geosearch';
+
 
 class Map extends React.Component {
   state = {
@@ -387,14 +389,22 @@ class Map extends React.Component {
     }
   }
   shouldComponentUpdate(prevState, nextState, nextProps, prevProps) {
+    console.log(prevProps, nextProps)
     if (isEqual(prevState.features, nextState.features)) {
       return false;
     }
     return true;
   }
-
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps.providerInput, this.props.providerInput)
+    if (nextProps.providerInput !== this.props.providerInput) {
+      const openStreet = new OpenStreetMapProvider({ params: {countrycodes: 'us'}})
+      const result = openStreet.search({ query: nextProps.providerInput}).then((result) => this.props.providerResults(result))
+      return true;
+    }
+  }
   render() {
-    const mapid = `mapid${!this.props.mapCount ? '' : ` ${this.props.mapCount.toString()}`}`
+      const mapid = `mapid${!this.props.mapCount ? '' : ` ${this.props.mapCount.toString()}`}`
     return (<div id={mapid} className='mapbox'/>);
   }
 }
