@@ -118,6 +118,8 @@ _Type:_ `Function`
 
 _Default:_`false`
 
+_Optional:_ `true`
+
 _Description:_ Function that returns the bounding box of the current visible
 map.
 
@@ -132,4 +134,23 @@ _Example_: `(data) => data` where data is:
     "lng": -96.40777587890625
   }
 }```
+
+### providerInput:
+_Type:_ `string`
+
+_Optional:_ `true`
+
+_Description:_ String to use to query geosearch control.
+
+``` NOTE: Currently only available when provider = 'openstreet' ```
+
+
+### providerResults: (data: ResultType[] | []) => void;
+_Type:_ `Function`
+
+_Optional:_ `true`
+
+_Description:_ Function to return geosearch results to UI.
+
+_Required:_ If `providerInput` is supplied to Map. 
 

@@ -42,7 +42,7 @@ export interface MapProps<> {
         markerHtml: string;
         mapCount: number;
         getBounding?: (data?: LatType) => void;
-        providerResults: (data: ResultType[] | []) => void;
+        providerResults?: (data: ResultType[] | []) => void;
         providerInput?: string;
 }
 declare const Map: React.Component<MapProps>
