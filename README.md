@@ -154,3 +154,11 @@ _Description:_ Function to return geosearch results to UI.
 
 _Required:_ If `providerInput` is supplied to Map. 
 
+### hideSearch:
+_Type:_ `boolean`
+
+_Optional:_ `true`
+
+_Default:_ `false`
+
+_Description:_ A flag to disable/hide the search button included on the map.
