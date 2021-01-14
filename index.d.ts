@@ -45,6 +45,7 @@ export interface MapProps {
     getBounding?: (data?: LatType) => void;
     providerResults?: (data: ResultType[] | []) => void;
     providerInput?: string;
+    hideSearch?: boolean
 }
 declare class Map extends React.Component<MapProps, any> {}
 export default Map

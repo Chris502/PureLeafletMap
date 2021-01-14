@@ -39,7 +39,8 @@ class Map extends React.Component {
     );
     tiles.addTo(map);
     if (provider) {
-      map.addControl(
+
+      !this.props.hideSearch && map.addControl(
         new GeoSearchControl({
           provider,
           animateZoom: false,
@@ -416,7 +417,8 @@ Map.defaultProps = {
   center: [38.194706, -85.71053],
   markerHtml:
     '<svg width="8" height="8" version="1.1" xmlns="http://www.w3.org/2000/svg"> <circle cx="4" cy="4" r="4" stroke="red" fill="red" stroke-width="0" /></svg>',
-  searchProvider: 'google'
+  searchProvider: 'google',
+  hideSearch: false
 };
 
 export default Map;
