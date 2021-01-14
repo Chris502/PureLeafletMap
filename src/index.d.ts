@@ -45,6 +45,7 @@ export interface MapProps<> {
         providerResults?: (data: ResultType[] | []) => void;
         providerInput?: string;
         hideSearch?: boolean;
+        geoLocate?: ResultType[];
 }
 declare const Map: React.Component<MapProps>
 export default Map

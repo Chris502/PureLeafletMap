@@ -63,7 +63,11 @@ class Map extends React.Component {
       marker.pm.enable(marker_options);
       const key = uuid();
       marker.options.key = key;
-      marker.addTo(map);
+      // removes marker from openstreet providers
+      /* 
+      NEED TO REFACTOR!!!!!!!!!!
+      */
+      (provider !== 'openstreet') && marker.addTo(map);
       const geoJson = marker.toGeoJSON();
       geoJson.properties.key = key;
 
@@ -402,9 +406,16 @@ class Map extends React.Component {
       const result = openStreet.search({ query: nextProps.providerInput}).then((result) => this.props.providerResults(result))
       return true;
     }
+    if (nextProps.geoLocate !== this.props.geoLocate) {
+      const resultBounds = nextProps.geoLocate.bounds
+      ? new L.LatLngBounds(nextProps.geoLocate.bounds)
+      : new L.LatLng(nextProps.geoLocate.y, nextProps.geoLocate.x).toBounds(10);
+      this.state.mapState.fitBounds(resultBounds)
+      return true
+    }
   }
   render() {
-      const mapid = `mapid${!this.props.mapCount ? '' : ` ${this.props.mapCount.toString()}`}`
+    const mapid = `mapid${!this.props.mapCount ? '' : ` ${this.props.mapCount.toString()}`}`
     return (<div id={mapid} className='mapbox'/>);
   }
 }
