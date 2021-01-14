@@ -410,7 +410,7 @@ class Map extends React.Component {
       const resultBounds = nextProps.geoLocate.bounds
       ? new L.LatLngBounds(nextProps.geoLocate.bounds)
       : new L.LatLng(nextProps.geoLocate.y, nextProps.geoLocate.x).toBounds(10);
-      this.state.mapState.setView(resultBounds.getCenter())
+      this.state.mapState.fitBounds(resultBounds)
       return true
     }
   }
