@@ -394,7 +394,6 @@ class Map extends React.Component {
     }
   }
   shouldComponentUpdate(prevState, nextState, nextProps, prevProps) {
-    console.log(prevProps, nextProps)
     if (isEqual(prevState.features, nextState.features)) {
       return false;
     }
@@ -407,9 +406,9 @@ class Map extends React.Component {
       return true;
     }
     if (nextProps.geoLocate !== this.props.geoLocate) {
-      const resultBounds = nextProps.geoLocate.bounds
-      ? new L.LatLngBounds(nextProps.geoLocate.bounds)
-      : new L.LatLng(nextProps.geoLocate.y, nextProps.geoLocate.x).toBounds(10);
+      const resultBounds = nextProps.geoLocate[0].bounds
+      ? new L.LatLngBounds(nextProps.geoLocate[0].bounds)
+      : new L.LatLng(nextProps.geoLocate[0].y, nextProps.geoLocate[0].x).toBounds(10);
       this.state.mapState.fitBounds(resultBounds)
       return true
     }
