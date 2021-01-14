@@ -162,3 +162,18 @@ _Optional:_ `true`
 _Default:_ `false`
 
 _Description:_ A flag to disable/hide the search button included on the map.
+
+### geoLocate:
+_Type:_ ```type ResultType = {
+        x: string // lon,
+        y: string // lat,
+        label: string // formatted address
+        bounds: string[][]
+        raw: RawType // raw provider result
+};```
+
+_Optional:_ `true`
+
+_Description:_ Allows outside results from geolocation to be passed to the map. For more informations about types look in `index.d.ts`
+
+```NOTE: Currently only works with `openstreet` as the `provider`.```
