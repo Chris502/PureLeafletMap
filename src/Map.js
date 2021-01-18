@@ -323,9 +323,12 @@ class Map extends React.Component {
         this.setState({ features: this.props.features });
         this.props.features.map(currentFeature => {
           if (currentFeature.geometry.type === 'Point') {
-
             const pointLayer = L.GeoJSON.geometryToLayer(currentFeature)
             const pointMarker = L.marker(pointLayer._latlng, marker_options)
+            if (this.props.tooltipContent) {
+
+              pointMarker.on('mouseover', () => pointMarker.bindPopup(this.props.tooltipContent))
+            }
             map.pm.enableDraw('Marker', marker_options);
             map.pm.disableDraw('Marker');
             pointMarker.options.key = currentFeature.properties.key

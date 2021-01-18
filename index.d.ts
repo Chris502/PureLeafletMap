@@ -47,6 +47,7 @@ export interface MapProps {
     providerInput?: string;
     hideSearch?: boolean
     geoLocate?: ResultType[];
+    tooltipContent?: string;
 
 }
 declare class Map extends React.Component<MapProps, any> {}
