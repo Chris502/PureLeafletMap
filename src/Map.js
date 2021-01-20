@@ -323,9 +323,26 @@ class Map extends React.Component {
         this.setState({ features: this.props.features });
         this.props.features.map(currentFeature => {
           if (currentFeature.geometry.type === 'Point') {
-
             const pointLayer = L.GeoJSON.geometryToLayer(currentFeature)
             const pointMarker = L.marker(pointLayer._latlng, marker_options)
+            if (this.props.tooltipContent) {
+              const customTip = (component) => {
+                if (!pointMarker.isPopupOpen()) pointMarker.bindTooltip(component).openTooltip();
+              }
+              const customPop = () => {
+                pointMarker.unbindTooltip();
+              }
+
+              pointMarker.bindPopup(this.props.tooltipContent.comp)
+              pointMarker.on('mouseover', () => customTip(this.props.tooltipContent.tooltip));
+              pointMarker.on('click', () => customPop());
+              pointMarker.on('popupopen', () => L.DomEvent.on(document.getElementById('test'),
+                'click',
+                () => this.props.tooltipContent.func(true)
+              ))
+              // pointMarker.on('popupclose', () => this.props.tooltipContent.func(false))
+
+            }
             map.pm.enableDraw('Marker', marker_options);
             map.pm.disableDraw('Marker');
             pointMarker.options.key = currentFeature.properties.key
@@ -386,10 +403,10 @@ class Map extends React.Component {
       }
       if (this.props.getBounding) {
         this.props.getBounding(map.getBounds())
-        map.on('zoomend', () => this.props.getBounding(map.getBounds()))
-}
+        map.on('zoomend', () => this.props.getBounding({bounds: map.getBounds(), zoom: map.getZoom()}))
+      }
       this.setState({ mapState: map }, () => {
-        setTimeout(function(){ map.invalidateSize()}, 100)
+        setTimeout(function () { map.invalidateSize() }, 100)
       });
     }
   }
@@ -400,22 +417,25 @@ class Map extends React.Component {
     return true;
   }
   componentWillReceiveProps(nextProps) {
+    if (nextProps.tooltipContent && (nextProps.tooltipContent.comp !== this.props.tooltipContent.comp)) {
+      return true
+    }
     if (nextProps.providerInput !== this.props.providerInput) {
-      const openStreet = new OpenStreetMapProvider({ params: {countrycodes: 'us'}})
-      const result = openStreet.search({ query: nextProps.providerInput}).then((result) => this.props.providerResults(result))
+      const openStreet = new OpenStreetMapProvider({ params: { countrycodes: 'us' } })
+      const result = openStreet.search({ query: nextProps.providerInput }).then((result) => this.props.providerResults(result))
       return true;
     }
     if (nextProps.geoLocate !== this.props.geoLocate) {
       const resultBounds = nextProps.geoLocate[0].bounds
-      ? new L.LatLngBounds(nextProps.geoLocate[0].bounds)
-      : new L.LatLng(nextProps.geoLocate[0].y, nextProps.geoLocate[0].x).toBounds(10);
+        ? new L.LatLngBounds(nextProps.geoLocate[0].bounds)
+        : new L.LatLng(nextProps.geoLocate[0].y, nextProps.geoLocate[0].x).toBounds(10);
       this.state.mapState.fitBounds(resultBounds)
       return true
     }
   }
   render() {
     const mapid = `mapid${!this.props.mapCount ? '' : ` ${this.props.mapCount.toString()}`}`
-    return (<div id={mapid} className='mapbox'/>);
+    return (<div id={mapid} className='mapbox' />);
   }
 }
 

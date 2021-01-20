@@ -1,6 +1,12 @@
 import { GeoJSON } from 'geojson';
 import * as React from 'react';
 
+type ToolTipType = {
+    comp: string;
+    func: () => void
+    tooltip: string;
+}
+
 type LatType = {
     northeast: {
         lat: Number
@@ -10,6 +16,10 @@ type LatType = {
         lat: Number
         lng: Number
     }
+}
+type BoundZoomType = {
+    bounds: LatType
+    zoom: number
 }
 type RawType = {
     boundingbox: string[]
@@ -42,11 +52,12 @@ export interface MapProps {
     center?: Array<number>;
     markerHtml?: string;
     mapCount?: number;
-    getBounding?: (data?: LatType) => void;
+    getBounding?: (data?: BoundZoomType) => void;
     providerResults?: (data: ResultType[] | []) => void;
     providerInput?: string;
     hideSearch?: boolean
     geoLocate?: ResultType[];
+    tooltipContent?: ToolTipType;
 
 }
 declare class Map extends React.Component<MapProps, any> {}

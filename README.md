@@ -121,10 +121,11 @@ _Default:_`false`
 _Optional:_ `true`
 
 _Description:_ Function that returns the bounding box of the current visible
-map.
+map. Fired on zoomEnd
 
-_Example_: `(data) => data` where data is: 
-```{
+_Example_: `(data) => data` where data is:
+
+{
   "_southWest": {
     "lat": 37.54239958054067,
     "lng": -99.90966796875001
@@ -133,8 +134,8 @@ _Example_: `(data) => data` where data is:
     "lat": 39.404366615861036,
     "lng": -96.40777587890625
   }
-}```
-
+  zoom: 13
+}
 ### providerInput:
 _Type:_ `string`
 
@@ -177,3 +178,17 @@ _Optional:_ `true`
 _Description:_ Allows outside results from geolocation to be passed to the map. For more informations about types look in `index.d.ts`
 
 ```NOTE: Currently only works with `openstreet` as the `provider`.```
+
+### tooltipContent:
+_Type:_ ```{
+    comp: string;
+    func: () => void
+    tooltip: string;
+}```
+
+_Optional:_ `true`
+
+_Description:_ 
+comp: is the popup content when a marker is clicked
+func: function to pass into popup
+tooltip: tooltip content.
