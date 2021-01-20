@@ -3,7 +3,7 @@ import React from 'react';
 
 type ToolTipType = {
         comp: string;
-        func: (value: boolean) => void
+        func: () => void
         tooltip: string
 }
 
