@@ -329,10 +329,8 @@ class Map extends React.Component {
               const options = {};
               this.props.tooltipContent.values &&
               this.props.tooltipContent.values.map(currentVal => {
-                console.log(currentFeature)
                 return options[currentVal] = currentFeature.properties[currentVal] || 'N/A' 
               })
-              console.log(options)
               const customTip = (component) => {
                 if (!pointMarker.isPopupOpen()) pointMarker.bindTooltip(component, {direction: 'top'}).openTooltip();
               }
@@ -424,9 +422,6 @@ class Map extends React.Component {
     return true;
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.tooltipContent && (nextProps.tooltipContent.comp !== this.props.tooltipContent.comp)) {
-      return true
-    }
     if (nextProps.providerInput !== this.props.providerInput) {
       const openStreet = new OpenStreetMapProvider({ params: { countrycodes: 'us' } })
       const result = openStreet.search({ query: nextProps.providerInput }).then((result) => this.props.providerResults(result))
