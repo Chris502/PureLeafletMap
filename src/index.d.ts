@@ -5,6 +5,8 @@ type ToolTipType = {
         comp: string;
         func: () => void
         tooltip: string
+        values: Array<string>
+
 }
 
 type LatType = {

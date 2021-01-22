@@ -326,20 +326,27 @@ class Map extends React.Component {
             const pointLayer = L.GeoJSON.geometryToLayer(currentFeature)
             const pointMarker = L.marker(pointLayer._latlng, marker_options)
             if (this.props.tooltipContent) {
+              const options = {};
+              this.props.tooltipContent.values &&
+              this.props.tooltipContent.values.map(currentVal => {
+                console.log(currentFeature)
+                return options[currentVal] = currentFeature.properties[currentVal] || 'N/A' 
+              })
+              console.log(options)
               const customTip = (component) => {
-                if (!pointMarker.isPopupOpen()) pointMarker.bindTooltip(component).openTooltip();
+                if (!pointMarker.isPopupOpen()) pointMarker.bindTooltip(component, {direction: 'top'}).openTooltip();
               }
               const customPop = () => {
                 pointMarker.unbindTooltip();
               }
 
-              pointMarker.bindPopup(this.props.tooltipContent.comp)
-              pointMarker.on('mouseover', () => customTip(this.props.tooltipContent.tooltip));
+              pointMarker.bindPopup( L.Util.template(this.props.tooltipContent.comp, options))
+              pointMarker.on('mouseover', () => customTip(L.Util.template(this.props.tooltipContent.tooltip, options)));
               pointMarker.on('click', () => customPop());
-              pointMarker.on('popupopen', () => L.DomEvent.on(document.getElementById('test'),
-                'click',
-                () => this.props.tooltipContent.func(true)
-              ))
+              // pointMarker.on('popupopen', () => L.DomEvent.on(document.getElementById('test'),
+              //   'click',
+              //   () => this.props.tooltipContent.func(true)
+              // ))
               // pointMarker.on('popupclose', () => this.props.tooltipContent.func(false))
 
             }
