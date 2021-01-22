@@ -181,9 +181,10 @@ _Description:_ Allows outside results from geolocation to be passed to the map. 
 
 ### tooltipContent:
 _Type:_ ```{
-    comp: string;
-    func: () => void
-    tooltip: string;
+    comp?: string;
+    func?: () => void
+    tooltip?: string;
+    values?: Array<string>
 }```
 
 _Optional:_ `true`
@@ -192,3 +193,27 @@ _Description:_
 comp: is the popup content when a marker is clicked
 func: function to pass into popup
 tooltip: tooltip content.
+values: If template string is used, This is the array of fields to check in the features `properties` field.
+
+_Example:_
+This works for popup/tooltip
+```
+comp: `<div>this is a {var}</div>`
+values: ['var']
+and the GeoJSON: 
+
+{
+    type: 'Feature',
+    properties: {
+      var: 'test'
+      key: 'cbb7672e-1e85-4c0b-8bcb-5bfc5af2d736',
+    },
+    geometry: {
+      type: 'Point',
+      coordinates: [-85.76399, 38.257058],
+    },
+  },```
+
+  compiles to 
+
+  ```<div>this is a test</div>```
