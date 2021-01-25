@@ -407,7 +407,7 @@ class Map extends React.Component {
         )
       }
       if (this.props.getBounding) {
-        this.props.getBounding(map.getBounds())
+        this.props.getBounding({bounds: map.getBounds(), zoom: map.getZoom()}))
         map.on('zoomend', () => this.props.getBounding({bounds: map.getBounds(), zoom: map.getZoom()}))
         map.on('dragend', () => this.props.getBounding({bounds: map.getBounds(), zoom: map.getZoom()}))
 
