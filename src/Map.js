@@ -407,7 +407,7 @@ class Map extends React.Component {
         )
       }
       if (this.props.getBounding) {
-        this.props.getBounding({bounds: map.getBounds(), zoom: map.getZoom()}))
+        this.props.getBounding({bounds: map.getBounds(), zoom: map.getZoom()})
         map.on('zoomend', () => this.props.getBounding({bounds: map.getBounds(), zoom: map.getZoom()}))
         map.on('dragend', () => this.props.getBounding({bounds: map.getBounds(), zoom: map.getZoom()}))
 
@@ -419,11 +419,15 @@ class Map extends React.Component {
   }
   shouldComponentUpdate(prevState, nextState, nextProps, prevProps) {
     if (isEqual(prevState.features, nextState.features)) {
+      console.log('fuck')
       return false;
     }
     return true;
   }
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps, prevProps) {
+    if (this.state.features.length === 0 && nextProps.features) {
+      this.setState({features: nextProps.features})
+    }
     if (nextProps.providerInput !== this.props.providerInput) {
       const openStreet = new OpenStreetMapProvider({ params: { countrycodes: 'us' } })
       const result = openStreet.search({ query: nextProps.providerInput }).then((result) => this.props.providerResults(result))
