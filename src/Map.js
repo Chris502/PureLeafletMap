@@ -419,14 +419,14 @@ class Map extends React.Component {
   }
   shouldComponentUpdate(prevState, nextState, nextProps, prevProps) {
     if (isEqual(prevState.features, nextState.features)) {
-      console.log('fuck')
+      if (this.props.getBounding) return true
       return false;
     }
     return true;
   }
   componentWillReceiveProps(nextProps, prevProps) {
-    if (this.state.features.length === 0 && nextProps.features) {
-      this.setState({features: nextProps.features})
+    if (nextProps.features !== prevProps.features) {
+      this.setState({features: nextProps.features}, () => this.state.mapState.invalidateSize())
     }
     if (nextProps.providerInput !== this.props.providerInput) {
       const openStreet = new OpenStreetMapProvider({ params: { countrycodes: 'us' } })
@@ -440,6 +440,101 @@ class Map extends React.Component {
       this.state.mapState.fitBounds(resultBounds)
       return true
     }
+    
+    
+   
+  }
+  componentDidUpdate(prevState) {
+    if (prevState.features !== this.state.features) {
+      const marker_options = {
+        draggable: false,
+        icon: generateIcon(this.props.markerHtml)
+      };
+      this.props.features.map(currentFeature => {
+        if (currentFeature.geometry.type === 'Point') {
+          const pointLayer = L.GeoJSON.geometryToLayer(currentFeature)
+          const pointMarker = L.marker(pointLayer._latlng, marker_options)
+          if (this.props.tooltipContent) {
+            const options = {};
+            this.props.tooltipContent.values &&
+            this.props.tooltipContent.values.map(currentVal => {
+              return options[currentVal] = currentFeature.properties[currentVal] || 'N/A' 
+            })
+            const customTip = (component) => {
+              if (!pointMarker.isPopupOpen()) pointMarker.bindTooltip(component, {direction: 'top'}).openTooltip();
+            }
+            const customPop = () => {
+              pointMarker.unbindTooltip();
+            }
+
+            pointMarker.bindPopup( L.Util.template(this.props.tooltipContent.comp, options))
+            pointMarker.on('mouseover', () => customTip(L.Util.template(this.props.tooltipContent.tooltip, options)));
+            pointMarker.on('click', () => customPop());
+            // pointMarker.on('popupopen', () => L.DomEvent.on(document.getElementById('test'),
+            //   'click',
+            //   () => this.props.tooltipContent.func(true)
+            // ))
+            // pointMarker.on('popupclose', () => this.props.tooltipContent.func(false))
+
+          }
+          this.state.mapState.pm.enableDraw('Marker', marker_options);
+          this.state.mapState.pm.disableDraw('Marker');
+          pointMarker.options.key = currentFeature.properties.key
+          pointMarker.pm.enable(marker_options);
+          pointMarker.addTo(this.state.mapState)
+
+        }
+        else {
+          const savedFeature = L.GeoJSON.geometryToLayer(currentFeature).bindTooltip((layer) => {
+            const savedArea = addArea(currentFeature)
+            return `Area: ${savedArea + 'mi'}<sup>2</sup>`;
+          }
+
+          )
+          savedFeature.on('pm:edit', (e) => {
+            const editedArea = addArea(e.target.toGeoJSON())
+            const editedLayer = e.target.toGeoJSON();
+            e.target.on("pm:markerdragend", () => {
+              this.state.mapState.eachLayer(layer => {
+                if (layer.options.key) {
+                  // const editedLayer = layer.toGeoJSON()
+                  const stateFeatures = cloneDeep(this.state.features);
+                  editedLayer.properties.key = e.target.options.key;
+                  const filterFeats = stateFeatures.filter(current => {
+                    return current.properties.key !== e.target.options.key;
+                  });
+                  filterFeats.push(editedLayer);
+                  this.props.onShapeChange(filterFeats);
+                  this.setState({ features: filterFeats });
+                }
+              });
+            });
+
+            e.target.bindTooltip((layer) => {
+              return `Area: ${editedArea + 'mi'}<sup>2</sup>`;
+            }
+            )
+          })
+          savedFeature.options.key = currentFeature.properties.key
+          savedFeature.on('mouseover', (event) => {
+            event.target.setStyle({
+              color: 'green',
+              opacity: 1,
+              fillOpacity: 0.2,
+            })
+          });
+          savedFeature.on('mouseout', (event) => {
+            event.target.setStyle({
+              color: '#3388FF',
+              opacity: 1,
+              fillOpacity: 0.2,
+            })
+          });
+          savedFeature.addTo(this.state.mapState)
+        }
+      }
+      )
+    } 
   }
   render() {
     const mapid = `mapid${!this.props.mapCount ? '' : ` ${this.props.mapCount.toString()}`}`
