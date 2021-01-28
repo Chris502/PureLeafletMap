@@ -445,6 +445,7 @@ class Map extends React.Component {
    
   }
   componentDidUpdate(prevState) {
+    if (this.state.features.length === 0) return this.state.mapState.eachLayer((layer) => !layer._url && layer.remove())
     if (prevState.features !== this.state.features) {
       const marker_options = {
         draggable: false,
