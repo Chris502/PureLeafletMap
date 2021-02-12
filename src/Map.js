@@ -2,6 +2,7 @@ import React from "react";
 import L from "leaflet";
 import "leaflet.pm";
 import "leaflet-easybutton";
+import "leaflet-providers"
 import noop from "lodash.noop";
 import isEqual from "lodash.isequal";
 import uuid from "uuid/v4";
@@ -29,17 +30,9 @@ class Map extends React.Component {
     // Set initial view at the center prop with a zoom level of 13
     map.setView(center, 13);
     const provider = providerSwitch(this.props.searchProvider, this.props.apiKey)
-    const tiles = L.tileLayer(
-      "https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
-      {
-        attribution:
-          '&copy; MapData: Google',
-        subdomains: ["mt0", "mt1", "mt2", "mt3"]
-      }
-    );
+    const tiles = L.tileLayer.provider(this.props.tileProvider || 'OpenStreetMap.Mapnik');
     tiles.addTo(map);
     if (provider) {
-
       !this.props.hideSearch && map.addControl(
         new GeoSearchControl({
           provider,
@@ -433,7 +426,8 @@ class Map extends React.Component {
       const result = openStreet.search({ query: nextProps.providerInput }).then((result) => this.props.providerResults(result))
       return true;
     }
-    if (nextProps.geoLocate !== this.props.geoLocate) {
+    // Is GeoLocate Different? Yes? ReCenter map over New location
+    if (!isEqual(nextProps.geoLocate, this.props.geoLocate)) {
       const resultBounds = nextProps.geoLocate[0].bounds
         ? new L.LatLngBounds(nextProps.geoLocate[0].bounds)
         : new L.LatLng(nextProps.geoLocate[0].y, nextProps.geoLocate[0].x).toBounds(10);
@@ -445,6 +439,7 @@ class Map extends React.Component {
    
   }
   componentDidUpdate(prevState) {
+    console.log(this.state, this.props)
     if (this.state.features.length === 0) return this.state.mapState.eachLayer((layer) => !layer._url && layer.remove())
     if (prevState.features !== this.state.features) {
       const marker_options = {
@@ -552,7 +547,8 @@ Map.defaultProps = {
   markerHtml:
     '<svg width="8" height="8" version="1.1" xmlns="http://www.w3.org/2000/svg"> <circle cx="4" cy="4" r="4" stroke="red" fill="red" stroke-width="0" /></svg>',
   searchProvider: 'google',
-  hideSearch: false
+  hideSearch: false,
+  tileProvider: 'OpenStreetMap.Mapnik'
 };
 
 export default Map;

@@ -44,6 +44,7 @@ type ResultType = {
 };
 
 export interface MapProps {
+    tileProvider: string;
     editable: boolean;
     cutMode?: boolean;
     onShapeChange: (feature?: GeoJSON) => void;

@@ -44,6 +44,7 @@ type ResultType = {
         raw: RawType // raw provider result
 };
 export interface MapProps<> {
+        tileProvider: string;
         editable: boolean;
         cutMode?: boolean;
         onShapeChange: (feature: GeoJSON) => Array<GeoJSON>;
