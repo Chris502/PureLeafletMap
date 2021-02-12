@@ -18,6 +18,17 @@ Check `index.d.ts` to see the props.
 
 # Props:
 
+## tileProvider:
+
+_Type:_ `string`
+
+_optional_: `true`
+
+_Default:_ `OpenStreetMap.Mapnik`
+
+_Description:_ List of providers are [Here](https://github.com/leaflet-extras/leaflet-providers/blob/master/leaflet-providers.jshttps://github.com/leaflet-extras/leaflet-providers/blob/master/leaflet-providers.js)
+Folling keys are `MAP_CREATOR.variant` ex: `Esri.WorldStreetMap` 
+
 ## editable
 
 _Type:_ `boolean`
@@ -104,8 +115,10 @@ _Default:_ `<svg width="8" height="8" version="1.1" xmlns="http://www.w3.org/200
 
 _Description:_ Icon for marker when searching
 
+---
 
 ### mapCount:
+
 _Type:_ `number`
 
 _Default:_ `''`
@@ -113,7 +126,10 @@ _Default:_ `''`
 _Description:_ Interger to render more than 1 map on the same page. (i.e....
 `mapCount={1}` makes Map Div ID:`mapid1`)
 
+---
+
 ### getBounding: 
+
 _Type:_ `Function`
 
 _Default:_`false`
@@ -136,7 +152,11 @@ _Example_: `(data) => data` where data is:
   }
   zoom: 13
 }
+
+---
+
 ### providerInput:
+
 _Type:_ `string`
 
 _Optional:_ `true`
@@ -145,17 +165,22 @@ _Description:_ String to use to query geosearch control.
 
 ``` NOTE: Currently only available when provider = 'openstreet' ```
 
+---
 
-### providerResults: (data: ResultType[] | []) => void;
+### providerResults: (data: ResultType[] | []) => void
+
 _Type:_ `Function`
 
 _Optional:_ `true`
 
 _Description:_ Function to return geosearch results to UI.
 
-_Required:_ If `providerInput` is supplied to Map. 
+_Required:_ If `providerInput` is supplied to Map.
+
+---
 
 ### hideSearch:
+
 _Type:_ `boolean`
 
 _Optional:_ `true`
@@ -164,7 +189,10 @@ _Default:_ `false`
 
 _Description:_ A flag to disable/hide the search button included on the map.
 
+---
+
 ### geoLocate:
+
 _Type:_ ```type ResultType = {
         x: string // lon,
         y: string // lat,
@@ -179,7 +207,10 @@ _Description:_ Allows outside results from geolocation to be passed to the map. 
 
 ```NOTE: Currently only works with `openstreet` as the `provider`.```
 
+---
+
 ### tooltipContent:
+
 _Type:_ ```{
     comp?: string;
     func?: () => void

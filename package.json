@@ -19,6 +19,7 @@
     "leaflet": "^1.4.0",
     "leaflet-easybutton": "^2.4.0",
     "leaflet-geosearch": "^2.7.0",
+    "leaflet-providers": "^1.11.0",
     "leaflet.pm": "^2.0.2",
     "lodash.clonedeep": "^4.5.0",
     "lodash.flatten": "^4.4.0",
