@@ -439,8 +439,15 @@ class Map extends React.Component {
    
   }
   componentDidUpdate(prevState) {
-    console.log(this.state, this.props)
-    if (this.state.features.length === 0) return this.state.mapState.eachLayer((layer) => !layer._url && layer.remove())
+    // Check to see if features have changed
+    // Filtering from a client side app
+    if (this.state.features.length === 0
+      || prevState.features.length !== this.state.features.length) {
+       this.state.mapState.eachLayer((layer) => !layer._url && layer.remove())
+    }
+    // Entire Feature Object change?
+    // Draw new markers
+    // Polygons still WIP
     if (prevState.features !== this.state.features) {
       const marker_options = {
         draggable: false,
