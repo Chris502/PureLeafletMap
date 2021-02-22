@@ -55,8 +55,6 @@ export interface MapProps {
     markerHtml?: string;
     mapCount?: number;
     getBounding?: (data?: BoundZoomType) => void;
-    providerResults?: (data: ResultType[] | []) => void;
-    providerInput?: string;
     hideSearch?: boolean
     geoLocate?: ResultType[];
     tooltipContent?: ToolTipType;

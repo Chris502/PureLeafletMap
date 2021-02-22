@@ -421,11 +421,6 @@ class Map extends React.Component {
     if (nextProps.features !== prevProps.features) {
       this.setState({features: nextProps.features}, () => this.state.mapState.invalidateSize())
     }
-    if (nextProps.providerInput !== this.props.providerInput) {
-      const openStreet = new OpenStreetMapProvider({ params: { countrycodes: 'us' } })
-      const result = openStreet.search({ query: nextProps.providerInput }).then((result) => this.props.providerResults(result))
-      return true;
-    }
     // Is GeoLocate Different? Yes? ReCenter map over New location
     if (!isEqual(nextProps.geoLocate, this.props.geoLocate)) {
       const resultBounds = nextProps.geoLocate[0].bounds
