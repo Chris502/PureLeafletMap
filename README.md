@@ -155,30 +155,6 @@ _Example_: `(data) => data` where data is:
 
 ---
 
-### providerInput:
-
-_Type:_ `string`
-
-_Optional:_ `true`
-
-_Description:_ String to use to query geosearch control.
-
-``` NOTE: Currently only available when provider = 'openstreet' ```
-
----
-
-### providerResults: (data: ResultType[] | []) => void
-
-_Type:_ `Function`
-
-_Optional:_ `true`
-
-_Description:_ Function to return geosearch results to UI.
-
-_Required:_ If `providerInput` is supplied to Map.
-
----
-
 ### hideSearch:
 
 _Type:_ `boolean`
