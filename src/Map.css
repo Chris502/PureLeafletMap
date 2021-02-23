@@ -1039,21 +1039,6 @@ div[id^='mapid'] {
   text-indent: 18px;
 }
 
-html,
-body {
-  font-family: "Open Sans", sans-serif;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-}
 
 .leaflet-control-geosearch.bar {
   position: absolute !important;
